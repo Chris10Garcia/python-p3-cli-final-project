@@ -20,7 +20,7 @@ class Owner(Base):
 
     def __repr__(self):
         pass
-    
+
     """
     __tablename__ 
 
@@ -33,6 +33,22 @@ class Owner(Base):
     """
 
 class Pet(Base):
+
+    __tablename__ = "pets"
+
+    id = Column(Integer(), primary_key=True)
+    age = Column(Integer())
+    checked_in = Column(Boolean())
+    days_checked_in = Column(Integer())
+    temperament = Column(String())
+
+    toy_id = Column(Integer(), ForeignKey('toys.id'))
+    breed_id = Column(Integer(), ForeignKey('breeds.id'))
+    owner_id = Column(Integer(), ForeignKey('owners.id'))
+
+    def __repr__(self):
+        pass
+
     """
     __tablename__
 
