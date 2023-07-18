@@ -1,4 +1,5 @@
-from sqlalchemy import MetaData
+from sqlalchemy import MetaData, Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
 
 
@@ -8,6 +9,18 @@ Base = declarative_base(metadata=metadata)
 
 
 class Owner(Base):
+    __tablename__ = "owners"
+
+    id = Column(Integer(), primary_key=True)
+    phone = Column(Integer())
+    email = Column(String(80))
+    address = Column(String())
+
+    pets = relationship('Pet', backref=backref('owner'))
+
+    def __repr__(self):
+        pass
+    
     """
     __tablename__ 
 
@@ -18,8 +31,6 @@ class Owner(Base):
     def __repr__
 
     """
-
-    pass
 
 class Pet(Base):
     """
