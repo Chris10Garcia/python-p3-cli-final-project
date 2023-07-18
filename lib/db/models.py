@@ -63,6 +63,15 @@ class Pet(Base):
     pass
 
 class Breed(Base):
+    __tablename__ = "breeds"
+
+    id = Column(Integer(), primary_key=True)
+    name = Column(String())
+    hair_length = Column(String())
+
+    def __repr__(self):
+        pass
+
     """
     __tablename__
 
@@ -73,6 +82,16 @@ class Breed(Base):
     pass
 
 class Toy(Base):
+    __tablename__ = "toys"
+
+    id = Column(Integer(), primary_key=True)
+    name = Column(String())
+    color = Column(String())
+    broken = Column(Boolean())
+
+    def __repr__(self):
+        pass
+
     """
     __tablename__
 
