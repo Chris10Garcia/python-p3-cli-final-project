@@ -69,6 +69,8 @@ class Breed(Base):
     name = Column(String())
     hair_length = Column(String())
 
+    pets = relationship('Pet', backref=backref('breed'))
+
     def __repr__(self):
         pass
 
@@ -88,6 +90,8 @@ class Toy(Base):
     name = Column(String())
     color = Column(String())
     broken = Column(Boolean())
+
+    pets = relationship('Pet', backref=backref('toy'))
 
     def __repr__(self):
         pass
