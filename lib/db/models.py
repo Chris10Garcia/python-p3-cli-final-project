@@ -29,6 +29,7 @@ class Pet(Base):
     __tablename__ = "pets"
 
     id = Column(Integer(), primary_key=True)
+    name = Column(String())
     age = Column(Integer())
     checked_in = Column(Boolean())
     days_checked_in = Column(Integer())
@@ -39,8 +40,7 @@ class Pet(Base):
     owner_id = Column(Integer(), ForeignKey('owners.id'))
 
     def __repr__(self):
-        # <Pet> Fido is a 12 year old shy dog that is currently not checked into Flatiron Dog Daycare
-        pass
+        return f"<Pet: {self.name} is a {self.age} year old {self.temperament} dog at FIDD>"
 
 
 
