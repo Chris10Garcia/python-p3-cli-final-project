@@ -20,27 +20,7 @@ class Owner(Base):
     dogs = relationship('Dog', backref=backref('owner'))
 
     def __repr__(self):
-        # <Owner: Christian Garcia is a customer at Flatiron Dog Daycare>
         return f"<OWNER: {self.name}>"
-
-
-class Dog(Base):
-
-    __tablename__ = "dogs"
-
-    id = Column(Integer(), primary_key=True)
-    name = Column(String())
-    age = Column(Integer())
-    checked_in = Column(Boolean())
-    days_checked_in = Column(Integer())
-    temperament = Column(String())
-
-    toy_id = Column(Integer(), ForeignKey('toys.id'))
-    breed_id = Column(Integer(), ForeignKey('breeds.id'))
-    owner_id = Column(Integer(), ForeignKey('owners.id'))
-
-    def __repr__(self):
-        return f"<DOG: {self.name}>"
 
 
 class Breed(Base):
@@ -70,4 +50,20 @@ class Toy(Base):
         return f"<TOY: {self.name}"
 
 
+class Dog(Base):
 
+    __tablename__ = "dogs"
+
+    id = Column(Integer(), primary_key=True)
+    name = Column(String())
+    age = Column(Integer())
+    checked_in = Column(Boolean())
+    days_checked_in = Column(Integer())
+    temperament = Column(String())
+
+    toy_id = Column(Integer(), ForeignKey('toys.id'))
+    breed_id = Column(Integer(), ForeignKey('breeds.id'))
+    owner_id = Column(Integer(), ForeignKey('owners.id'))
+
+    def __repr__(self):
+        return f"<DOG: {self.name}>"
