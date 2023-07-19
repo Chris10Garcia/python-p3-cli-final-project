@@ -17,7 +17,11 @@ class Owner(Base):
     email = Column(String(80))
     address = Column(String())
 
-    dogs = relationship('Dog', backref=backref('owner'))
+    dogs = relationship('Dog', backref=backref('owner'), cascade="all, delete-orphan")
+    # If we add an owner, their dogs will be saved
+    # If we merge an owner, their dogs would not be duplicated
+    # If we delete an owner, their dogs should be removed as well
+    # If a dog is removed from owner.dogs, the dog would be removed
 
     def __repr__(self):
         return f"<OWNER: {self.name}>"
