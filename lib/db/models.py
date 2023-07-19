@@ -17,16 +17,16 @@ class Owner(Base):
     email = Column(String(80))
     address = Column(String())
 
-    pets = relationship('Pet', backref=backref('owner'))
+    dogs = relationship('Dog', backref=backref('owner'))
 
     def __repr__(self):
         # <Owner: Christian Garcia is a customer at Flatiron Dog Daycare>
-        return f"<Owner: {self.name} is a customer at FIDD>"
+        return f"<OWNER: {self.name}>"
 
 
-class Pet(Base):
+class Dog(Base):
 
-    __tablename__ = "pets"
+    __tablename__ = "dogs"
 
     id = Column(Integer(), primary_key=True)
     name = Column(String())
@@ -40,8 +40,7 @@ class Pet(Base):
     owner_id = Column(Integer(), ForeignKey('owners.id'))
 
     def __repr__(self):
-        return f"<Pet: {self.name} is a {self.age} year old {self.temperament} dog at FIDD>"
-
+        return f"<DOG: {self.name}>"
 
 
 class Breed(Base):
@@ -51,11 +50,10 @@ class Breed(Base):
     name = Column(String())
     hair_length = Column(String())
 
-    pets = relationship('Pet', backref=backref('breed'))
+    dogs = relationship('Dog', backref=backref('breed'))
 
     def __repr__(self):
-        # <Breed> The german shepard is a dog breed type found at FIDD
-        pass
+        return f"<BREED: {self.name}"
 
 
 class Toy(Base):
@@ -66,11 +64,10 @@ class Toy(Base):
     color = Column(String())
     broken = Column(Boolean())
 
-    pets = relationship('Pet', backref=backref('toy'))
+    dogs = relationship('Dog', backref=backref('toy'))
 
     def __repr__(self):
-        # <Toy> The red squeeky ball is a toy found at FIDD
-        pass
+        return f"<TOY: {self.name}"
 
 
 
