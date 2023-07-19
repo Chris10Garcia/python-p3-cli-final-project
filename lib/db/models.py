@@ -35,6 +35,7 @@ class Breed(Base):
     hair_length = Column(String())
 
     dogs = relationship('Dog', backref=backref('breed'))
+    # default save-update, merge is sufficient enough
 
     def __repr__(self):
         return f"<BREED: {self.name}"
@@ -49,6 +50,7 @@ class Toy(Base):
     broken = Column(Boolean())
 
     dogs = relationship('Dog', backref=backref('toy'))
+    # default save-update, merge is sufficient enough
 
     def __repr__(self):
         return f"<TOY: {self.name}"
