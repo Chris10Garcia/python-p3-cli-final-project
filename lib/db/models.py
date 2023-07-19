@@ -21,16 +21,6 @@ class Owner(Base):
     def __repr__(self):
         pass
 
-    """
-    __tablename__ 
-
-    table attributes
-
-    pets = relationship
-
-    def __repr__
-
-    """
 
 class Pet(Base):
 
@@ -49,18 +39,7 @@ class Pet(Base):
     def __repr__(self):
         pass
 
-    """
-    __tablename__
 
-    table attributes 
-    + foriegn ID for owner id
-    + foriegn ID for breed id
-    + foriegn ID for toy id
-
-    def __repr__
-    """
-
-    pass
 
 class Breed(Base):
     __tablename__ = "breeds"
@@ -74,14 +53,6 @@ class Breed(Base):
     def __repr__(self):
         pass
 
-    """
-    __tablename__
-
-    table attributes 
-
-    def __repr__
-    """
-    pass
 
 class Toy(Base):
     __tablename__ = "toys"
@@ -96,12 +67,5 @@ class Toy(Base):
     def __repr__(self):
         pass
 
-    """
-    __tablename__
 
-    table attributes 
-    
-    def __repr__
-    """
-    pass
 
