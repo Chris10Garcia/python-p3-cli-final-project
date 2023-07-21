@@ -22,8 +22,15 @@ dog_temperaments = [
 ]
 
 hair_length = [
-    "short", "very short", "bald", "medium", "long", "extra-long"
+    "short", "very short", "naked", "medium", "long", "extra-long"
 ]
+
+toys = [
+    "ball", "lamb plush", "pig plush", "moose plush", "big ball",
+    "bacon flavor wishbone", "snake plush", "squirrel plush",
+    "tug-n-toss", "teething chew toy", "treat dispensing toy",
+    "challenge slider", "rope tug"
+    ]
 
 def delete_records():
     session.query(Owner).delete()
@@ -46,12 +53,27 @@ def create_record():
         email = fake.email(),
         address = fake.street_address()
     ) for x in range(80)]
-    
 
-# create records
+    with open ("breeds.txt") as txt_file:
+        for line in txt_file:
+            breeds = Breed(
+                name = line,
+                hair_length = fake.random_element(hair_length)
+        )
+    
+    toys = [Toy(
+        name = fake.random_element(toys),
+        color = fake.safe_color_name(),
+        broken = fake.boolean(chance_of_getting_true=75)
+    ) for x in range (20)]
+
+    session.add_all(owners + breeds + toys + dogs)
+    session.commit()
+
+    return owners, breeds, toys, dogs
 
 # relate_records
 
 if __name__ == '__main__':
     delete_records()
-    create_record()
+    owners, breeds, toys, dogs = create_record()
