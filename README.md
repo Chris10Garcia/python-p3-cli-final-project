@@ -1,5 +1,22 @@
 # Phase 3 CLI Project Template
 
+
+
+
+
+# Sources
+
+dog toys
+https://www.thesprucepets.com/best-dog-toys-4151137
+
+dog breeds
+https://github.com/dariusk/corpora/blob/master/data/animals/dogs.json 
+
+modules
+faker:
+https://faker.readthedocs.io/en/master/index.html 
+
+
 ## Learning Goals
 
 - Discuss the basic directory structure of a CLI.
