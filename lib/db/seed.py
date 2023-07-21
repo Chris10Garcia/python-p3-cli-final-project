@@ -25,7 +25,7 @@ hair_length = [
     "short", "very short", "naked", "medium", "long", "extra-long"
 ]
 
-toys = [
+toy_list = [
     "ball", "lamb plush", "pig plush", "moose plush", "big ball",
     "bacon flavor wishbone", "snake plush", "squirrel plush",
     "tug-n-toss", "teething chew toy", "treat dispensing toy",
@@ -47,6 +47,11 @@ def create_record():
         temperament = fake.random_element(dog_temperaments)
     ) for x in range(30)]
 
+    for dog in dogs:
+        if dog.checked_in:
+            dog.days_checked_in = random.randint(0, 29)
+
+
     owners = [Owner(
         name = fake.name(),
         phone = fake.phone_number(),
@@ -55,14 +60,13 @@ def create_record():
     ) for x in range(80)]
 
     with open ("breeds.txt") as txt_file:
-        for line in txt_file:
-            breeds = Breed(
+        breeds = [Breed(
                 name = line,
                 hair_length = fake.random_element(hair_length)
-        )
+                ) for line in txt_file]
     
     toys = [Toy(
-        name = fake.random_element(toys),
+        name = fake.random_element(toy_list),
         color = fake.safe_color_name(),
         broken = fake.boolean(chance_of_getting_true=75)
     ) for x in range (20)]
@@ -72,8 +76,16 @@ def create_record():
 
     return owners, breeds, toys, dogs
 
-# relate_records
+def relate_records(owners, breeds, toys, dogs):
+    for dog in dogs:
+        dog.toy_id = random.randint(1, len(toys))
+        dog.breed_id = random.randint(1, len(breeds))
+        dog.owner_id = random.randint(1, len(owners))
+
+    session.add_all(dogs)
+    session.commit()
 
 if __name__ == '__main__':
     delete_records()
     owners, breeds, toys, dogs = create_record()
+    relate_records(owners, breeds, toys, dogs)
