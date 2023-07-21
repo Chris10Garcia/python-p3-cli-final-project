@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 
 from faker import Faker
 import random
@@ -50,3 +51,7 @@ def create_record():
 # create records
 
 # relate_records
+
+if __name__ == '__main__':
+    delete_records()
+    create_record()
