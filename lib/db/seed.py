@@ -45,7 +45,7 @@ def create_record():
         age = random.randint(0,15),
         checked_in = fake.boolean(),
         temperament = fake.random_element(dog_temperaments)
-    ) for x in range(30)]
+    ) for x in range(200)]
 
     for dog in dogs:
         if dog.checked_in:
@@ -57,7 +57,7 @@ def create_record():
         phone = fake.phone_number(),
         email = fake.email(),
         address = fake.street_address()
-    ) for x in range(80)]
+    ) for x in range(60)]
 
     with open ("breeds.txt") as txt_file:
         breeds = [Breed(
