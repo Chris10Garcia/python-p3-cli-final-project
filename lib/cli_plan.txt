@@ -1,0 +1,36 @@
+
+
+CLI Dog Day Care
+
+
+C R U D
+
+Create
+- new dog record
+- new owner record
+- new toy
+
+Read
+- a owner of the dog (supply one or random)
+- browse owners 
+- a dog's status / info (supply one or random)
+- how many dogs the owner has
+- the dog's favorite toy
+- the owners with the most dogs
+- owners with no dogs?
+- top favorite toy
+- the most / least breed type of dog
+- (optional) check if the owner's dog is checked in + how many days
+- (optional) total number of actively checked in dogs
+
+Update
+- change the owner of the dog?
+- update a dog's favorite toy
+- update a dog's age
+- update a dog's name
+- (optional) change checked in status
+
+Delete
+- delete a toy
+- delete a dog
+- delete an owner (will remove dogs)
