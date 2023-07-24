@@ -3,19 +3,22 @@ from sqlalchemy.orm import sessionmaker
 
 from db.models import Owner, Dog, Breed, Toy
 
-engine = create_engine("sqlite:///dog_daycare.db")
+engine = create_engine("sqlite:///db/dog_daycare.db")
 Session = sessionmaker(bind = engine)
 session = Session()
 
 
 # pull all dogs from db
 def all_dogs():
-    pass
+    dogs = session.query(Dog).all()
+    return dogs
 
 # pull all owners from db
 def all_owners():
-    pass
+    owners = session.query(Owner).all()
+    return owners
 
 # pull all toys from db
 def all_toys():
-    pass
+    toys = session.query(Toy).all()
+    return toys
