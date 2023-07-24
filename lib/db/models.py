@@ -24,7 +24,7 @@ class Owner(Base):
     # If a dog is removed from owner.dogs, the dog would be removed
 
     def __repr__(self):
-        return f"<OWNER> ID: {self.id}, Name {self.name}"
+        return f"<OWNER> ID: {self.id}, NAME: {self.name}"
 
 
 class Breed(Base):
@@ -53,7 +53,7 @@ class Toy(Base):
     # default save-update, merge is sufficient enough
 
     def __repr__(self):
-        return f"<TOY> ID: {self.id}, Toy: {self.color} {self.name}"
+        return f"<TOY> ID: {self.id}, TOY: {self.color} {self.name}"
 
 
 class Dog(Base):
@@ -72,4 +72,4 @@ class Dog(Base):
     owner_id = Column(Integer(), ForeignKey('owners.id'))
 
     def __repr__(self):
-        return f"<DOG> ID: {self.id}, Name: {self.name}"
+        return f"<DOG> ID: {self.id}, NAME: {self.name}"

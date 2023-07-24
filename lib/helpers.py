@@ -17,6 +17,7 @@ def print_all(data):
         if counter % 25 == 0:
             click.prompt("Press enter to continue browsing", default= " ", show_default=False)
         counter += 1
+    click.echo("You have reached the end of the list")
 
 # pull all dogs from db
 def all_dogs():
