@@ -18,7 +18,9 @@ do these next, as they don't require user input
 - owners with no dogs?
 
 requires input. Should these be an option or argument?
-- a owner of the dog (supply one or random)
+- a owner of the dog
+    - if ID is supplied, instant info (check for int)
+    - (optional) if name is supplied, provide search research, have user select ID
 - a dog's status / info (supply one or random)
 - how many dogs the owner has
 - the dog's favorite toy
