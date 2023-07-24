@@ -3,10 +3,20 @@ from sqlalchemy.orm import sessionmaker
 
 from db.models import Owner, Dog, Breed, Toy
 
+import click
+
 engine = create_engine("sqlite:///db/dog_daycare.db")
 Session = sessionmaker(bind = engine)
 session = Session()
 
+
+def print_all(data):
+    counter = 1
+    for entry in data:
+        click.echo(entry)
+        if counter % 25 == 0:
+            click.prompt("Press enter to continue", default= " ", show_default=False)
+        counter += 1
 
 # pull all dogs from db
 def all_dogs():
