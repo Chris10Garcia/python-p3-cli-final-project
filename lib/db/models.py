@@ -24,7 +24,7 @@ class Owner(Base):
     # If a dog is removed from owner.dogs, the dog would be removed
 
     def __repr__(self):
-        return f"<OWNER: {self.name}>"
+        return f"<OWNER> ID: {self.id}, Name {self.name}"
 
 
 class Breed(Base):
@@ -32,13 +32,13 @@ class Breed(Base):
 
     id = Column(Integer(), primary_key=True)
     name = Column(String())
-    hair_length = Column(String())
+    hair_length = Column(String())  #DELETE THIS ONCE EVERYTHING ELSE IS DONE?
 
     dogs = relationship('Dog', backref=backref('breed'))
     # default save-update, merge is sufficient enough
 
     def __repr__(self):
-        return f"<BREED: {self.name}>"
+        return f"<BREED: {self.name} >"
 
 
 class Toy(Base):
@@ -53,7 +53,7 @@ class Toy(Base):
     # default save-update, merge is sufficient enough
 
     def __repr__(self):
-        return f"<TOY: {self.name}>"
+        return f"<TOY> ID: {self.id}, Toy: {self.color} {self.name}"
 
 
 class Dog(Base):
@@ -72,4 +72,4 @@ class Dog(Base):
     owner_id = Column(Integer(), ForeignKey('owners.id'))
 
     def __repr__(self):
-        return f"<DOG: {self.name}>"
+        return f"<DOG> ID: {self.id}, Name: {self.name}"
