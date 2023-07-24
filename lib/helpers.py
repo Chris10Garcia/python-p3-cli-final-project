@@ -10,6 +10,17 @@ Session = sessionmaker(bind = engine)
 session = Session()
 
 
+def build_owner_dict(dogs):
+    owner_dict = {}
+    for dog in dogs:
+        if dog.owner in owner_dict:
+            owner_dict[dog.owner] += 1
+        else:
+            owner_dict[dog.owner] = 1
+
+    return owner_dict    
+
+
 def print_all(data):
     counter = 1
     for entry in data:
