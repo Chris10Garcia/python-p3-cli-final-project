@@ -4,6 +4,9 @@ import click
 import helpers
 
 
+
+
+
 @click.group()
 def cli():
     """ Welcome to the Flatiron Dog Daycare CLI. 
@@ -13,9 +16,18 @@ def cli():
     
     """
 
-@cli.command()
-def get_most_breeds():
-    """Return from most to least the number of dog breeds in the daycare"""
+@cli.group()
+def get():
+    """Lists all subcommands for getting various data from the dogday care DB"""
+
+@cli.group()
+def update():
+    """Lists all subcommands for updating various parameters within the DB"""
+
+
+@get.command()
+def most_breeds():
+    """Return breeds from most to least number in the daycare"""
     dogs = helpers.all_dogs()
     breed_dict = helpers.build_count_dict(dogs, "breed")
 
@@ -23,18 +35,20 @@ def get_most_breeds():
     helpers.print_all(breed_dict)
 
 
-@cli.command
-def get_most_favorite_toys():
+@get.command()
+def most_favorite_toys():
     """Returns dog's favorite toys from most to least favorite"""
     dogs = helpers.all_dogs()
     toy_dict = helpers.build_count_dict(dogs, "toy")
 
     toy_dict = sorted(toy_dict.items(), key=lambda x : x[1], reverse=True)
+    click.echo("Here are the most to least favorite toys in the daycare")
+    click.echo("Toys, # of dogs that like it")
     helpers.print_all(toy_dict)
 
 
-@cli.command()
-def get_owners_with_most_dogs():
+@get.command()
+def most_dog_owners():
     """Returns the owners with the most to least amount of dogs"""
 
     owners = helpers.all_owners()
@@ -49,23 +63,23 @@ def get_owners_with_most_dogs():
     helpers.print_all(owner_dict)
 
 
-@cli.command()
-def get_all_dogs():
+@get.command()
+def all_dogs():
     """Prints out all the dogs in the daycare center"""
     dogs = helpers.all_dogs()
 
     helpers.print_all(dogs)
 
-@cli.command()
-def get_all_owners():
+@get.command(short_help="prints all owners")
+def all_owners():
     """Prints out all the owners in the daycare center"""
     
     owners = helpers.all_owners()
     helpers.print_all(owners)
 
 
-@cli.command()
-def get_all_toys():
+@get.command()
+def all_toys():
     """Prints out all the toys in the daycare center"""
     
     toys = helpers.all_toys()

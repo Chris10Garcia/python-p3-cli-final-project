@@ -12,8 +12,7 @@ CREATE
 
 READ
 do these next, as they don't require user input
-- top favorite toy (dictionary) (i can refactor code)
-- the most / least breed type of dog (dictionary)
+
 
 requires input. Should these be an option or argument?
 - a owner of the dog
@@ -26,10 +25,13 @@ requires input. Should these be an option or argument?
 - (optional) check if the owner's dog is checked in
 - (optional) total number of actively checked in dogs
 
-- browse owners (COMPLETE)
-- browse dogs (COMPLETE)
-- browse toys (COMPLETE)
-- the owners with the most dogs (this can use a dictionary) (COMPLETE)
+COMPLETE
+- browse owners
+- browse dogs
+- browse toys
+- the owners with the most dogs (this can use a dictionary)
+- top favorite toy (dictionary) (i can refactor code)
+- the most / least breed type of dog (dictionary)
 
 
 UPDATE
