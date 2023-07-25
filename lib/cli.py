@@ -30,6 +30,27 @@ def update():
 #   GETTER COMMANDS
 
 @get.command()
+@click.option("--name", type=click.STRING, required=True, help="Search by name")
+def search_for_toy(name):
+    """Searches toys by names"""
+    result = helpers.search_toy(name)
+    helpers.print_all(result)
+
+@get.command()
+@click.option("--name", type=click.STRING, required=True, help="Search by name")
+def search_for_dog(name):
+    """Searches dogs by names"""
+    result = helpers.search_dog(name)
+    helpers.print_all(result)
+
+@get.command()
+@click.option("--name", type=click.STRING, required=True, help="Search by name")
+def search_for_owner(name):
+    """Searches owners by names"""
+    result = helpers.search_owner(name)
+    helpers.print_all(result)
+
+@get.command()
 @click.option("--id", type= click.INT, required=True, help="Use owner ID")
 def info_owner(id):
     "Return owner info"

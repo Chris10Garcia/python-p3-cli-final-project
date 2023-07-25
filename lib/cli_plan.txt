@@ -2,34 +2,13 @@
 
 CLI Dog Day Care
 
-
+To do list
 C R U D
 
 CREATE
 - new dog record
 - new owner record
 - new toy
-
-READ
-Should these be an option or argument?
-- a owner of the dog
-    - if ID is supplied, instant info (check for int)
-    - (optional) if name is supplied, provide search research, have user select ID
-- a dog's status / info (supply one or random)
-- how many dogs the owner has
-- the dog's favorite toy
-
-- (optional) check if the owner's dog is checked in
-- (optional) total number of actively checked in dogs
-
-COMPLETE
-- browse owners
-- browse dogs
-- browse toys
-- the owners with the most dogs (this can use a dictionary)
-- top favorite toy (dictionary) (i can refactor code)
-- the most / least breed type of dog (dictionary)
-
 
 UPDATE
 - change the owner of the dog?
@@ -42,3 +21,19 @@ UPDATE
 DELETE
 - delete a dog
 - delete an owner (will remove dogs)
+
+COMPLETE
+READ
+- search for by name: dog, owner, toy
+- browse dog info by id
+- browse owner info by id
+- browse toy info by id
+- browse breed info by id
+- show all owners
+- show all dogs
+- show all toys
+- the owners with the most dogs (this can use a dictionary)
+- top favorite toy (dictionary) (i can refactor code)
+- the most / least breed type of dog (dictionary)
+
+

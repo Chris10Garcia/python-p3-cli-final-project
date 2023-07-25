@@ -9,7 +9,20 @@ engine = create_engine("sqlite:///db/dog_daycare.db")
 Session = sessionmaker(bind = engine)
 session = Session()
 
+def search_toy(search):
+    toys = session.query(Toy).filter(Toy.name.like(f"%{search}%")).all()
+    return toys
 
+def search_dog(search):
+    dogs = session.query(Dog).filter(Dog.name.like(f"%{search}%")).all()
+    return dogs
+
+def search_owner(search):
+    owners = session.query(Owner).filter(Owner.name.like(f"%{search}%")).all()
+    return owners
+
+
+# i think i can refactor this
 def return_dog(id):
     dog = session.query(Dog).filter(Dog.id == id).first()
     return dog
