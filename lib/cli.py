@@ -14,12 +14,38 @@ def cli():
     """
 
 @cli.command()
-def get_owners_with_most_dogs():
+def get_most_breeds():
+    """Return from most to least the number of dog breeds in the daycare"""
     dogs = helpers.all_dogs()
+    breed_dict = helpers.build_count_dict(dogs, "breed")
 
-    owner_dict = sorted(helpers.build_owner_dict(dogs).items(), key=lambda x :x[1], reverse=True)
+    breed_dict = sorted(breed_dict.items(), key=lambda x: x[1], reverse=True)
+    helpers.print_all(breed_dict)
+
+
+@cli.command
+def get_most_favorite_toys():
+    """Returns dog's favorite toys from most to least favorite"""
+    dogs = helpers.all_dogs()
+    toy_dict = helpers.build_count_dict(dogs, "toy")
+
+    toy_dict = sorted(toy_dict.items(), key=lambda x : x[1], reverse=True)
+    helpers.print_all(toy_dict)
+
+
+@cli.command()
+def get_owners_with_most_dogs():
+    """Returns the owners with the most to least amount of dogs"""
+
+    owners = helpers.all_owners()
+  
+    owner_dict = {owner.name : len(owner.dogs) for owner in owners}
+    owner_dict = sorted(owner_dict.items(), key=lambda x :x[1], reverse=True) 
+    #dict.items() returns a tuple. Use index to access 2nd element to sort
+
+
     click.echo("Here is the list of owners with most to least amount of dogs:")
-    click.echo("<OWNER>, # of dogs")
+    click.echo("Owner, # of dogs")
     helpers.print_all(owner_dict)
 
 

@@ -12,10 +12,8 @@ CREATE
 
 READ
 do these next, as they don't require user input
-
-- top favorite toy (dictionary)
+- top favorite toy (dictionary) (i can refactor code)
 - the most / least breed type of dog (dictionary)
-- owners with no dogs?
 
 requires input. Should these be an option or argument?
 - a owner of the dog
@@ -43,6 +41,5 @@ UPDATE
 - (optional) change checked in status
 
 DELETE
-- delete a toy
 - delete a dog
 - delete an owner (will remove dogs)

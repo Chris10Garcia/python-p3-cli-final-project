@@ -62,7 +62,7 @@ def create_record():
 
     with open ("breeds.txt") as txt_file:
         breeds = [Breed(
-                name = line,
+                name = line.strip(),
                 hair_length = fake.random_element(hair_length)
                 ) for line in txt_file]
     

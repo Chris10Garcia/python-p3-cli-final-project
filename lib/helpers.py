@@ -9,16 +9,17 @@ engine = create_engine("sqlite:///db/dog_daycare.db")
 Session = sessionmaker(bind = engine)
 session = Session()
 
-
-def build_owner_dict(dogs):
-    owner_dict = {}
-    for dog in dogs:
-        if dog.owner in owner_dict:
-            owner_dict[dog.owner] += 1
+# refactor so I can use this in other places
+# do i need this????
+def build_count_dict(data, arg):
+    build_dict = {}
+    for element in data:
+        if getattr(element, arg) in build_dict:
+            build_dict[getattr(element, arg)] += 1
         else:
-            owner_dict[dog.owner] = 1
+            build_dict[getattr(element, arg)] = 1
 
-    return owner_dict    
+    return build_dict    
 
 
 def print_all(data):
