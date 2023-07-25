@@ -69,7 +69,7 @@ def create_record():
     toys = [Toy(
         name = fake.random_element(toy_list),
         color = fake.safe_color_name(),
-        broken = fake.boolean(chance_of_getting_true=75)
+        broken = fake.boolean(chance_of_getting_true=15)
     ) for x in range (20)]
 
     session.add_all(owners + breeds + toys + dogs)

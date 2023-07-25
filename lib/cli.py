@@ -25,45 +25,69 @@ def update():
     """Lists all subcommands for updating various parameters within the DB"""
 
 
+
 ################################################
 #   GETTER COMMANDS
 
-
-## NEEED TO WORK ON THIS ##
 @get.command()
-@click.option('--name', type = click.STRING, help="search owner by NAME")
-@click.option('--id', type = click.INT, required = True, default=0, help="search owner by ID")
-def owner_info(name, id):
-    "Search owner and provide details"
-    click.echo('runs without parameters')
+@click.option("--id", type= click.INT, required=True, help="Use owner ID")
+def info_owner(id):
+    "Return owner info"
+    owner = helpers.return_owner(id)
 
-    if id:
-        click.echo(id)
+    if not owner:
+        click.echo("ID produced no results")
     else:
-        click.echo(name)
-    # get's the owner details, plus dog name + id
-    # 
+        click.echo(f"Name: {owner.name}")
+        click.echo(f"Phone: {owner.phone}")
+        click.echo(f"Email: {owner.email}")
+        click.echo(f"Address: {owner.address}")
+        click.echo(f"{owner.name} owns the following dogs: ")
+        for dog in owner.dogs:
+            click.echo(dog)
 
-## NEEED TO WORK ON THIS ##
-# @get.command()
-# @click.option()
-# def dog_info():
-#     # get's the dog details, plus owner name + id
-#     pass
+@get.command()
+@click.option("--id", type=click.INT, required=True, help="Use dog ID")
+def info_dog(id):
+    "Return dog info"
+    dog = helpers.return_dog(id)
 
-## NEEED TO WORK ON THIS ##
-# @get.command()
-# @click.option()
-# def toy_info():
-#     # get's the toy's information
-#     pass
+    if not dog:
+        click.echo("ID produced no results")
+    else:
+        click.echo(f"Dog Name: {dog.name}")
+        click.echo(f"Age: {dog.age}")
+        click.echo(f"Checked in: {True if dog.checked_in else False}")
+        click.echo(f"Owner: {dog.owner.name}, ID: {dog.owner.id}")
+        click.echo(f"Favorite Toy: {dog.toy.color} {dog.toy.name}")
+        click.echo(f"Breed: {dog.breed.name}")
 
-## NEEED TO WORK ON THIS ##
-# @get.command()
-# @click.option()
-# def breed_info():
-#     # get's the breed's information
-#     pass
+
+@get.command()
+@click.option("--id", type=click.INT, required=True, help="Use toy ID")
+def info_toy(id):
+    "Return toy info"
+    toy = helpers.return_toy(id)
+
+    if not toy:
+        click.echo("ID produced no results")
+    else:
+        click.echo(f"Toy: {toy.color} {toy.name}")
+        click.echo(f"Broken: {toy.broken}")
+
+
+@get.command()
+@click.option("--id", type=click.INT, required=True, help="Use toy ID")
+def info_breed(id):
+    "Return breed info"
+    breed = helpers.return_breed(id)
+
+    if not breed:
+        click.echo("ID produced no results")
+    else:
+        click.echo(f"Breed: {breed.name}")
+        click.echo(f"Hair Length: {breed.hair_length}")
+
 
 @get.command()
 def most_breeds():
