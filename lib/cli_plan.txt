@@ -11,10 +11,7 @@ CREATE
 - new toy
 
 READ
-do these next, as they don't require user input
-
-
-requires input. Should these be an option or argument?
+Should these be an option or argument?
 - a owner of the dog
     - if ID is supplied, instant info (check for int)
     - (optional) if name is supplied, provide search research, have user select ID

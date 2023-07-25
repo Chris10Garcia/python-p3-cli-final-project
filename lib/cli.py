@@ -25,6 +25,46 @@ def update():
     """Lists all subcommands for updating various parameters within the DB"""
 
 
+################################################
+#   GETTER COMMANDS
+
+
+## NEEED TO WORK ON THIS ##
+@get.command()
+@click.option('--name', type = click.STRING, help="search owner by NAME")
+@click.option('--id', type = click.INT, required = True, default=0, help="search owner by ID")
+def owner_info(name, id):
+    "Search owner and provide details"
+    click.echo('runs without parameters')
+
+    if id:
+        click.echo(id)
+    else:
+        click.echo(name)
+    # get's the owner details, plus dog name + id
+    # 
+
+## NEEED TO WORK ON THIS ##
+# @get.command()
+# @click.option()
+# def dog_info():
+#     # get's the dog details, plus owner name + id
+#     pass
+
+## NEEED TO WORK ON THIS ##
+# @get.command()
+# @click.option()
+# def toy_info():
+#     # get's the toy's information
+#     pass
+
+## NEEED TO WORK ON THIS ##
+# @get.command()
+# @click.option()
+# def breed_info():
+#     # get's the breed's information
+#     pass
+
 @get.command()
 def most_breeds():
     """Return breeds from most to least number in the daycare"""
