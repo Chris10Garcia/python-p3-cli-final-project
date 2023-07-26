@@ -41,11 +41,11 @@ def create():
 @update.command()
 @click.option("--id", required=True, type=click.INT)
 @click.option("--attribute", "-attr", required=True, type=click.Choice(["name", "phone", "email", "address"]))
-@click.option("--value", "-v", required=True )
+@click.option("--value", "-v", required=True)
 def property_owner(attribute, id, value):
     owner = helpers.return_record(id, "owner")
 
-    message = f"Changing {owner.name}'s {attribute} from {owner[attribute]} to {value}"
+    message = f"Changing {getattr(owner, 'name')}'s {attribute} from {getattr(owner, attribute)} to {value}"
 
     confirm = click.confirm(message)
 
