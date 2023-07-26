@@ -25,15 +25,22 @@ def update_dog_owner(dog, new_owner):
     session.commit()
     return dog
 
-def delete_owner(id):
-    owner = session.query(Owner).filter(Owner.id == id).first()
-    session.delete(owner)
+def delete_record(id, parameter):
+    model = MODELS_DICT[parameter]
+    
+    record = session.query(model).filter(model.id == id).first()
+    session.delete(record)
     session.commit()
 
-def delete_dog(id):
-    dog = session.query(Dog).filter(Dog.id == id).first()
-    session.delete(dog)
-    session.commit()
+# def delete_owner(id):
+#     owner = session.query(Owner).filter(Owner.id == id).first()
+#     session.delete(owner)
+#     session.commit()
+
+# def delete_dog(id):
+#     dog = session.query(Dog).filter(Dog.id == id).first()
+#     session.delete(dog)
+#     session.commit()
 
 def search_toy(search):
     toys = session.query(Toy).filter(Toy.name.like(f"%{search}%")).all()
@@ -97,16 +104,22 @@ def print_all(data):
     click.echo("You have reached the end of the list")
 
 # pull all dogs from db
-def all_dogs():
-    dogs = session.query(Dog).all()
-    return dogs
 
-# pull all owners from db
-def all_owners():
-    owners = session.query(Owner).all()
-    return owners
+def get_all(parameter):
+    model = MODELS_DICT[parameter]
+    records = session.query(model).all()
+    return records
 
-# pull all toys from db
-def all_toys():
-    toys = session.query(Toy).all()
-    return toys
+# def all_dogs():
+#     dogs = session.query(Dog).all()
+#     return dogs
+
+# # pull all owners from db
+# def all_owners():
+#     owners = session.query(Owner).all()
+#     return owners
+
+# # pull all toys from db
+# def all_toys():
+#     toys = session.query(Toy).all()
+#     return toys

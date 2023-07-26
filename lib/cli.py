@@ -5,8 +5,6 @@ import helpers
 
 
 
-
-
 @click.group()
 def cli():
     """ Welcome to the Flatiron Dog Daycare CLI. 
@@ -46,7 +44,12 @@ def create():
 @click.option("--value", "-v", required=True )
 def property_owner(attribute, id, value):
     owner = helpers.return_record(id, "owner")
-    
+
+    message = f"Changing {owner.name}'s {attribute} from {owner[attribute]} to {value}"
+
+    confirm = click.confirm(message)
+
+
     pass
 
 
@@ -57,12 +60,6 @@ def property_owner(attribute, id, value):
 @click.option("--new-owner-id", required=True, type=click.INT)
 def dog_owner(dog_id, new_owner_id):
     """Updates the owner of the dog."""
-
-    # prompt for new owner 
-    # --ownerID
-    # --dogID 
-
-    # check for each ID if it's valid
 
     new_owner = helpers.return_record(new_owner_id, "owner")
     dog = helpers.return_record(dog_id, "dog")
@@ -96,7 +93,7 @@ def owner_record(id):
     confirm_delete = click.confirm("Are you sure you want to delete this record and subrecords?")
     
     if confirm_delete:
-        helpers.delete_owner(id)
+        helpers.delete_record(id, "owner")
         click.echo("Record successfully deleted")
     else:
         click.echo("Action aborted")
@@ -113,7 +110,7 @@ def dog_record(id):
     confirm_delete = click.confirm("Are you sure you want to delete this record?")
     
     if confirm_delete:
-        helpers.delete_dog(id)
+        helpers.delete_record(id, "dog")
         click.echo("Record successfully deleted")
     else:
         click.echo("Action aborted")
@@ -198,7 +195,7 @@ def info_breed(id):
 @get.command()
 def most_breeds():
     """Return breeds from most to least number in the daycare"""
-    dogs = helpers.all_dogs()
+    dogs = helpers.get_all("dog")
     breed_dict = helpers.build_count_dict(dogs, "breed")
 
     breed_dict = sorted(breed_dict.items(), key=lambda x: x[1], reverse=True)
@@ -208,7 +205,7 @@ def most_breeds():
 @get.command()
 def most_favorite_toys():
     """Returns dog's favorite toys from most to least favorite"""
-    dogs = helpers.all_dogs()
+    dogs = helpers.get_all("dog")
     toy_dict = helpers.build_count_dict(dogs, "toy")
 
     toy_dict = sorted(toy_dict.items(), key=lambda x : x[1], reverse=True)
@@ -221,7 +218,7 @@ def most_favorite_toys():
 def most_dog_owners():
     """Returns the owners with the most to least amount of dogs"""
 
-    owners = helpers.all_owners()
+    owners = helpers.get_all("owner")
   
     owner_dict = {owner.name : len(owner.dogs) for owner in owners}
     owner_dict = sorted(owner_dict.items(), key=lambda x :x[1], reverse=True) 
@@ -234,26 +231,34 @@ def most_dog_owners():
 
 
 @get.command()
-def all_dogs():
-    """Prints out all the dogs in the daycare center"""
-    dogs = helpers.all_dogs()
+@click.option("--parameter", "-p", type=click.Choice(["dog", "owner", "breed", "toy"]), required=True, help="select the type of record to browse")
+def all_records_by(parameter):
+    """Prints out all records based on input parameter"""
+    records = helpers.get_all(parameter)
+    helpers.print_all(records)
 
-    helpers.print_all(dogs)
 
-@get.command(short_help="prints all owners")
-def all_owners():
-    """Prints out all the owners in the daycare center"""
+# @get.command()
+# def all_dogs():
+#     """Prints out all the dogs in the daycare center"""
+#     dogs = helpers.all_dogs()
+
+#     helpers.print_all(dogs)
+
+# @get.command(short_help="prints all owners")
+# def all_owners():
+#     """Prints out all the owners in the daycare center"""
     
-    owners = helpers.all_owners()
-    helpers.print_all(owners)
+#     owners = helpers.all_owners()
+#     helpers.print_all(owners)
 
 
-@get.command()
-def all_toys():
-    """Prints out all the toys in the daycare center"""
+# @get.command()
+# def all_toys():
+#     """Prints out all the toys in the daycare center"""
     
-    toys = helpers.all_toys()
-    helpers.print_all(toys)
+#     toys = helpers.all_toys()
+#     helpers.print_all(toys)
 
 if __name__ == "__main__":
     cli()
