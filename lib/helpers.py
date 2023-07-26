@@ -9,6 +9,14 @@ engine = create_engine("sqlite:///db/dog_daycare.db")
 Session = sessionmaker(bind = engine)
 session = Session()
 
+
+MODELS_DICT = {
+        "dog" : Dog,
+        "toy" : Toy,
+        "breed" : Breed,
+        "owner" : Owner
+    }
+
 def update_dog_owner(dog, new_owner):
     
     dog.owner_id = new_owner.id
@@ -40,32 +48,27 @@ def search_owner(search):
 
 
 def return_record(id, parameter):
-    model_dict = {
-        "dog" : Dog,
-        "toy" : Toy,
-        "breed" : Breed,
-        "owner" : Owner
-    }
-    model = model_dict[parameter]
+    
+    model = MODELS_DICT[parameter]
     record = session.query(model).filter(model.id == id).first()
     return record
 
 # i think i can refactor this
-def return_dog(id):
-    dog = session.query(Dog).filter(Dog.id == id).first()
-    return dog
+# def return_dog(id):
+#     dog = session.query(Dog).filter(Dog.id == id).first()
+#     return dog
 
-def return_toy(id):
-    toy = session.query(Toy).filter(Toy.id == id).first()
-    return toy
+# def return_toy(id):
+#     toy = session.query(Toy).filter(Toy.id == id).first()
+#     return toy
 
-def return_owner(id):
-    owner = session.query(Owner).filter(Owner.id == id).first()
-    return owner
+# def return_owner(id):
+#     owner = session.query(Owner).filter(Owner.id == id).first()
+#     return owner
 
-def return_breed(id):
-    breed = session.query(Breed).filter(Breed.id == id).first()
-    return breed
+# def return_breed(id):
+#     breed = session.query(Breed).filter(Breed.id == id).first()
+#     return breed
 
 # refactor so I can use this in other places
 # do i need this????

@@ -40,6 +40,10 @@ def create():
 ################################################
 #   UPDATE COMMANDS
 
+
+
+
+
 @update.command()
 @click.option("--dog-ID", required=True, type=click.INT)
 @click.option("--new-owner-ID", required=True, type=click.INT)
@@ -149,7 +153,8 @@ def search_for_owner(name):
 @click.option("--id", type= click.INT, required=True, help="Use owner ID")
 def info_owner(id):
     "Return owner info"
-    owner = helpers.return_owner(id)
+
+    owner = helpers.return_record(id, "owner")
 
     if not owner:
         click.echo("ID produced no results")
@@ -166,7 +171,8 @@ def info_owner(id):
 @click.option("--id", type=click.INT, required=True, help="Use dog ID")
 def info_dog(id):
     "Return dog info"
-    dog = helpers.return_dog(id)
+
+    dog = helpers.return_record(id, "dog")
 
     if not dog:
         click.echo("ID produced no results")
@@ -183,7 +189,9 @@ def info_dog(id):
 @click.option("--id", type=click.INT, required=True, help="Use toy ID")
 def info_toy(id):
     "Return toy info"
-    toy = helpers.return_toy(id)
+    # toy = helpers.return_toy(id)
+
+    toy = helpers.return_record(id, "toy")
 
     if not toy:
         click.echo("ID produced no results")
@@ -196,7 +204,8 @@ def info_toy(id):
 @click.option("--id", type=click.INT, required=True, help="Use toy ID")
 def info_breed(id):
     "Return breed info"
-    breed = helpers.return_breed(id)
+
+    breed = helpers.return_record(id, "breed")
 
     if not breed:
         click.echo("ID produced no results")
