@@ -18,9 +18,6 @@ UPDATE
 - update a dog's name
 - (optional) change checked in status
 
-DELETE
-- delete a dog
-- delete an owner (will remove dogs)
 
 COMPLETE
 READ
@@ -36,4 +33,7 @@ READ
 - top favorite toy (dictionary) (i can refactor code)
 - the most / least breed type of dog (dictionary)
 
+DELETE
+- delete a dog
+- delete an owner (will remove dogs)
 

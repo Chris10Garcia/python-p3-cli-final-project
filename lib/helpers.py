@@ -9,6 +9,16 @@ engine = create_engine("sqlite:///db/dog_daycare.db")
 Session = sessionmaker(bind = engine)
 session = Session()
 
+def delete_owner(id):
+    owner = session.query(Owner).filter(Owner.id == id).first()
+    session.delete(owner)
+    session.commit()
+
+def delete_dog(id):
+    dog = session.query(Dog).filter(Dog.id == id).first()
+    session.delete(dog)
+    session.commit()
+
 def search_toy(search):
     toys = session.query(Toy).filter(Toy.name.like(f"%{search}%")).all()
     return toys

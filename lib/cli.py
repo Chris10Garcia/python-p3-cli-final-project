@@ -25,6 +25,65 @@ def update():
     """Lists all subcommands for updating various parameters within the DB"""
 
 
+@cli.group()
+def delete():
+    """Lists all subcommands for deleting entities within the DB"""
+
+
+################################################
+#   UPDATE COMMANDS
+
+@update.command()
+def dog_owner():
+    pass
+
+
+
+################################################
+#   DELETE COMMANDS
+
+@delete.command()
+@click.option("--id", required=True, help="Deletes owners using ID")
+def owner_record(id):
+    """Delete's the owner record and dogs that they own from the system"""
+
+    owner = helpers.return_owner(id)
+    if owner:
+        click.echo(owner)
+        for dog in owner.dogs:
+            click.echo(dog)
+        confirm_delete = click.confirm("Are you sure you want to delete this record and subrecords?")
+    else:
+        click.echo("ID produced no owner record")
+        return
+    
+    if confirm_delete:
+        helpers.delete_owner(id)
+        click.echo("Record successfully deleted")
+    else:
+        click.echo("Action aborted")
+
+@delete.command()
+@click.option('--id', required=True, help="Delete's dog record using ID")
+def dog_record(id):
+    """Delete's the dog record from the owner. Owner record stays in the system"""
+
+    # pull record of dog
+    # confirm if you want to delete this dog
+    dog = helpers.return_dog(id)
+    if dog:
+        click.echo(dog)
+        confirm_delete = click.confirm("Are you sure you want to delete this record?")
+        
+    else:
+        click.echo("ID produced no dog record")
+        return
+    
+    if confirm_delete:
+        helpers.delete_dog(id)
+        click.echo("Record successfully deleted")
+    else:
+        click.echo("Action aborted")
 
 ################################################
 #   GETTER COMMANDS
