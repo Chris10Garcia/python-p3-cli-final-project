@@ -40,6 +40,16 @@ def create():
 ################################################
 #   UPDATE COMMANDS
 
+@update.command()
+@click.option("--id", required=True, type=click.INT)
+@click.option("--attribute", "-attr", required=True, type=click.Choice(["name", "phone", "email", "address"]))
+@click.option("--value", "-v", required=True )
+def attribute_owner(attribute, id, value):
+    owner = helpers.return_record(id, "owner")
+    
+    pass
+
+
 
 
 
@@ -56,8 +66,8 @@ def dog_owner(dog_id, new_owner_id):
 
     # check for each ID if it's valid
 
-    new_owner = helpers.return_owner(new_owner_id)
-    dog = helpers.return_dog(dog_id)
+    new_owner = helpers.return_record(new_owner_id, "owner")
+    dog = helpers.return_record(dog_id, "dog")
 
     if not new_owner:
         click.echo(f"Owner ID input '{new_owner_id}' does not exist")
@@ -156,16 +166,13 @@ def info_owner(id):
 
     owner = helpers.return_record(id, "owner")
 
-    if not owner:
-        click.echo("ID produced no results")
-    else:
-        click.echo(f"Name: {owner.name}")
-        click.echo(f"Phone: {owner.phone}")
-        click.echo(f"Email: {owner.email}")
-        click.echo(f"Address: {owner.address}")
-        click.echo(f"{owner.name} owns the following dogs: ")
-        for dog in owner.dogs:
-            click.echo(dog)
+    click.echo(f"Name: {owner.name}")
+    click.echo(f"Phone: {owner.phone}")
+    click.echo(f"Email: {owner.email}")
+    click.echo(f"Address: {owner.address}")
+    click.echo(f"{owner.name} owns the following dogs: ")
+    for dog in owner.dogs:
+        click.echo(dog)
 
 @get.command()
 @click.option("--id", type=click.INT, required=True, help="Use dog ID")
@@ -174,15 +181,12 @@ def info_dog(id):
 
     dog = helpers.return_record(id, "dog")
 
-    if not dog:
-        click.echo("ID produced no results")
-    else:
-        click.echo(f"Dog Name: {dog.name}")
-        click.echo(f"Age: {dog.age}")
-        click.echo(f"Checked in: {True if dog.checked_in else False}")
-        click.echo(f"Owner: {dog.owner.name}, ID: {dog.owner.id}")
-        click.echo(f"Favorite Toy: {dog.toy.color} {dog.toy.name}")
-        click.echo(f"Breed: {dog.breed.name}")
+    click.echo(f"Dog Name: {dog.name}")
+    click.echo(f"Age: {dog.age}")
+    click.echo(f"Checked in: {True if dog.checked_in else False}")
+    click.echo(f"Owner: {dog.owner.name}, ID: {dog.owner.id}")
+    click.echo(f"Favorite Toy: {dog.toy.color} {dog.toy.name}")
+    click.echo(f"Breed: {dog.breed.name}")
 
 
 @get.command()
@@ -193,11 +197,8 @@ def info_toy(id):
 
     toy = helpers.return_record(id, "toy")
 
-    if not toy:
-        click.echo("ID produced no results")
-    else:
-        click.echo(f"Toy: {toy.color} {toy.name}")
-        click.echo(f"Broken: {toy.broken}")
+    click.echo(f"Toy: {toy.color} {toy.name}")
+    click.echo(f"Broken: {toy.broken}")
 
 
 @get.command()
@@ -207,11 +208,8 @@ def info_breed(id):
 
     breed = helpers.return_record(id, "breed")
 
-    if not breed:
-        click.echo("ID produced no results")
-    else:
-        click.echo(f"Breed: {breed.name}")
-        click.echo(f"Hair Length: {breed.hair_length}")
+    click.echo(f"Breed: {breed.name}")
+    click.echo(f"Hair Length: {breed.hair_length}")
 
 
 @get.command()

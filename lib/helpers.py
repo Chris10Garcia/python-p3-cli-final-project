@@ -17,6 +17,7 @@ MODELS_DICT = {
         "owner" : Owner
     }
 
+
 def update_dog_owner(dog, new_owner):
     
     dog.owner_id = new_owner.id
@@ -51,6 +52,9 @@ def return_record(id, parameter):
     
     model = MODELS_DICT[parameter]
     record = session.query(model).filter(model.id == id).first()
+
+    if not record:
+        raise click.BadParameter(message =f"The ID {id} did not produce any {parameter} records" )
     return record
 
 # i think i can refactor this
