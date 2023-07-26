@@ -44,7 +44,7 @@ def create():
 @click.option("--id", required=True, type=click.INT)
 @click.option("--attribute", "-attr", required=True, type=click.Choice(["name", "phone", "email", "address"]))
 @click.option("--value", "-v", required=True )
-def attribute_owner(attribute, id, value):
+def property_owner(attribute, id, value):
     owner = helpers.return_record(id, "owner")
     
     pass
@@ -52,11 +52,9 @@ def attribute_owner(attribute, id, value):
 
 
 
-
-
 @update.command()
-@click.option("--dog-ID", required=True, type=click.INT)
-@click.option("--new-owner-ID", required=True, type=click.INT)
+@click.option("--dog-id", required=True, type=click.INT)
+@click.option("--new-owner-id", required=True, type=click.INT)
 def dog_owner(dog_id, new_owner_id):
     """Updates the owner of the dog."""
 
@@ -68,13 +66,6 @@ def dog_owner(dog_id, new_owner_id):
 
     new_owner = helpers.return_record(new_owner_id, "owner")
     dog = helpers.return_record(dog_id, "dog")
-
-    if not new_owner:
-        click.echo(f"Owner ID input '{new_owner_id}' does not exist")
-        return
-    elif not dog:
-        click.echo(f"Dog ID input '{dog_id}' does not exist")
-        return
     
     message = f"Update DOG '{dog.name}' from it's OWNER {dog.owner.name}, ID {dog.owner.id} to NEW OWNER {new_owner.name}, ID {new_owner.id}"
 
@@ -97,15 +88,12 @@ def dog_owner(dog_id, new_owner_id):
 def owner_record(id):
     """Delete's the owner record and dogs that they own from the system"""
 
-    owner = helpers.return_owner(id)
-    if owner:
-        click.echo(owner)
-        for dog in owner.dogs:
-            click.echo(dog)
-        confirm_delete = click.confirm("Are you sure you want to delete this record and subrecords?")
-    else:
-        click.echo("ID produced no owner record")
-        return
+    owner = helpers.return_record(id, "owner")
+    click.echo(owner)
+    for dog in owner.dogs:
+        click.echo(dog)
+
+    confirm_delete = click.confirm("Are you sure you want to delete this record and subrecords?")
     
     if confirm_delete:
         helpers.delete_owner(id)
@@ -120,14 +108,9 @@ def dog_record(id):
 
     # pull record of dog
     # confirm if you want to delete this dog
-    dog = helpers.return_dog(id)
-    if dog:
-        click.echo(dog)
-        confirm_delete = click.confirm("Are you sure you want to delete this record?")
-        
-    else:
-        click.echo("ID produced no dog record")
-        return
+    dog = helpers.return_record(id, "dog")
+    click.echo(dog)
+    confirm_delete = click.confirm("Are you sure you want to delete this record?")
     
     if confirm_delete:
         helpers.delete_dog(id)
