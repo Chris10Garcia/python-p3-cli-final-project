@@ -8,11 +8,12 @@ C R U D
 CREATE
 - new dog record
 - new owner record
-- new toy
+- new toy?
 
 UPDATE
-- change the owner of the dog?
-- change owner name
+- change attributes of
+    - owner name
+    - dog name
 - update a dog's favorite toy
 - update a dog's age
 - update a dog's name

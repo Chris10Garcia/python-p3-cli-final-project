@@ -24,18 +24,54 @@ def get():
 def update():
     """Lists all subcommands for updating various parameters within the DB"""
 
-
 @cli.group()
 def delete():
     """Lists all subcommands for deleting entities within the DB"""
+
+@cli.group()
+def create():
+    """Lists all subcommands for creating entities"""
+
+
+################################################
+#   CREATE COMMANDS
 
 
 ################################################
 #   UPDATE COMMANDS
 
 @update.command()
-def dog_owner():
-    pass
+@click.option("--dog-ID", required=True, type=click.INT)
+@click.option("--new-owner-ID", required=True, type=click.INT)
+def dog_owner(dog_id, new_owner_id):
+    """Updates the owner of the dog."""
+
+    # prompt for new owner 
+    # --ownerID
+    # --dogID 
+
+    # check for each ID if it's valid
+
+    new_owner = helpers.return_owner(new_owner_id)
+    dog = helpers.return_dog(dog_id)
+
+    if not new_owner:
+        click.echo(f"Owner ID input '{new_owner_id}' does not exist")
+        return
+    elif not dog:
+        click.echo(f"Dog ID input '{dog_id}' does not exist")
+        return
+    
+    message = f"Update DOG '{dog.name}' from it's OWNER {dog.owner.name}, ID {dog.owner.id} to NEW OWNER {new_owner.name}, ID {new_owner.id}"
+
+    confirm_update = click.confirm(message)
+
+    if confirm_update:
+        updated_dog = helpers.update_dog_owner(dog, new_owner)
+        click.echo("Update successful")
+        click.echo(f"{updated_dog} now has owner {updated_dog.owner}")
+    else:
+        click.echo("Update aborted")
 
 
 

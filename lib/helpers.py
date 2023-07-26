@@ -9,6 +9,13 @@ engine = create_engine("sqlite:///db/dog_daycare.db")
 Session = sessionmaker(bind = engine)
 session = Session()
 
+def update_dog_owner(dog, new_owner):
+    
+    dog.owner_id = new_owner.id
+    session.add(dog)
+    session.commit()
+    return dog
+
 def delete_owner(id):
     owner = session.query(Owner).filter(Owner.id == id).first()
     session.delete(owner)
@@ -31,6 +38,17 @@ def search_owner(search):
     owners = session.query(Owner).filter(Owner.name.like(f"%{search}%")).all()
     return owners
 
+
+def return_record(id, parameter):
+    model_dict = {
+        "dog" : Dog,
+        "toy" : Toy,
+        "breed" : Breed,
+        "owner" : Owner
+    }
+    model = model_dict[parameter]
+    record = session.query(model).filter(model.id == id).first()
+    return record
 
 # i think i can refactor this
 def return_dog(id):
