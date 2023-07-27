@@ -45,27 +45,10 @@ def delete_record(id, parameter):
     session.delete(record)
     session.commit()
 
-# def delete_owner(id):
-#     owner = session.query(Owner).filter(Owner.id == id).first()
-#     session.delete(owner)
-#     session.commit()
-
-# def delete_dog(id):
-#     dog = session.query(Dog).filter(Dog.id == id).first()
-#     session.delete(dog)
-#     session.commit()
-
-def search_toy(search):
-    toys = session.query(Toy).filter(Toy.name.like(f"%{search}%")).all()
-    return toys
-
-def search_dog(search):
-    dogs = session.query(Dog).filter(Dog.name.like(f"%{search}%")).all()
-    return dogs
-
-def search_owner(search):
-    owners = session.query(Owner).filter(Owner.name.like(f"%{search}%")).all()
-    return owners
+def search_record(search, parameter):
+    model = MODELS_DICT[parameter]
+    record = session.query(model).filter(model.name.like(f"%{search}%")).all()
+    return record
 
 
 def return_record(id, parameter):
@@ -77,25 +60,7 @@ def return_record(id, parameter):
         raise click.BadParameter(message =f"The ID {id} did not produce any {parameter} records" )
     return record
 
-# i think i can refactor this
-# def return_dog(id):
-#     dog = session.query(Dog).filter(Dog.id == id).first()
-#     return dog
 
-# def return_toy(id):
-#     toy = session.query(Toy).filter(Toy.id == id).first()
-#     return toy
-
-# def return_owner(id):
-#     owner = session.query(Owner).filter(Owner.id == id).first()
-#     return owner
-
-# def return_breed(id):
-#     breed = session.query(Breed).filter(Breed.id == id).first()
-#     return breed
-
-# refactor so I can use this in other places
-# do i need this????
 def build_count_dict(data, arg):
     build_dict = {}
     for element in data:
@@ -105,6 +70,11 @@ def build_count_dict(data, arg):
             build_dict[getattr(element, arg)] = 1
 
     return build_dict    
+
+def get_all(parameter):
+    model = MODELS_DICT[parameter]
+    records = session.query(model).all()
+    return records
 
 
 def print_all(data):
@@ -116,23 +86,21 @@ def print_all(data):
         counter += 1
     click.echo("You have reached the end of the list")
 
-# pull all dogs from db
+def print_details(record_obj):
 
-def get_all(parameter):
-    model = MODELS_DICT[parameter]
-    records = session.query(model).all()
-    return records
+    record_dict = record_obj.__dict__
 
-# def all_dogs():
-#     dogs = session.query(Dog).all()
-#     return dogs
+    for key, value in record_dict.items():
+        if key == "_sa_instance_state" or key == "id":
+            continue
+        if key == "breed_id" or key=="owner_id" or key=="toy_id":
+            click.echo(return_record(value, key.replace("_id", "")))
+            continue
+        click.echo(f"{key.capitalize()}: {value}")
 
-# # pull all owners from db
-# def all_owners():
-#     owners = session.query(Owner).all()
-#     return owners
+    if isinstance(record_obj, Owner):
+        click.echo("This person owns the following dogs")
+        for dog in record_obj.dogs:
+            click.echo(dog)
 
-# # pull all toys from db
-# def all_toys():
-#     toys = session.query(Toy).all()
-#     return toys
+

@@ -47,7 +47,7 @@ def create_record():
         temperament = fake.random_element(dog_temperaments)
     ) for x in range(200)]
 
-    # going to delete this once everything else is set up
+    # going to delete this once everything else is set up?
     for dog in dogs:
         if dog.checked_in:
             dog.days_checked_in = random.randint(0, 29)

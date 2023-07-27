@@ -4,7 +4,6 @@ import click
 import helpers
 
 
-
 @click.group()
 def cli():
     """ Welcome to the Flatiron Dog Daycare CLI. 
@@ -31,10 +30,14 @@ def create():
     """Lists all subcommands for creating entities"""
 
 
-################################################
-#   CREATE COMMANDS
+##################################
+# CREATE COMMANDS                #
+##################################
 
 
+## CREATES NEW DOG
+
+## can refactor this????
 @create.command()
 @click.option("--name", "-n", required=True, prompt=True)
 @click.option("--age", required=True, type = click.INT, prompt=True)
@@ -67,7 +70,9 @@ def new_dog(name, age, temperament, owner_id, breed_id, toy_id):
 
 
 
+## CREATES NEW OWNER
 
+## can refactor this????
 @create.command()
 @click.option("--name", "-n", required=True)
 @click.option("--phone", "-p", required=True)
@@ -85,13 +90,11 @@ def new_owner(name, phone, email, address):
     helpers.create_record(new_record, "owner")
 
 
-# create code to add new dog
-# name, age, checekd_in, days_checked_in, temperament
-# need to first ask if the owner exists, if not abort
+##################################
+# UPDATE COMMANDS                #
+##################################
 
-################################################
-#   UPDATE COMMANDS
-
+## UPDATES DOG ATTRIBUTES
 @update.command()
 @click.option("--id", required=True, type=click.INT)
 @click.option("--attribute", "-attr", required=True, type=click.Choice(["name", "age", "temperament", "checked_in", "breed_id", "toy_id"]), )
@@ -100,7 +103,7 @@ def attribute_dog(attribute, id, value):
     """Change the details of an exisiting owner"""
     dog = helpers.return_record(id, "dog")
 
-
+    ## can refactor this??
     # checks to see if the toy or breed exists in the DB
     param = None
     if attribute == "breed_id":
@@ -145,7 +148,7 @@ def attribute_dog(attribute, id, value):
 
 
 
-
+## UPDATES OWNER ATTRIBUTES
 @update.command()
 @click.option("--id", required=True, type=click.INT)
 @click.option("--attribute", "-attr", required=True, type=click.Choice(["name", "phone", "email", "address"]), )
@@ -190,9 +193,11 @@ def dog_owner(dog_id, new_owner_id):
 
 
 
-################################################
-#   DELETE COMMANDS
+##################################
+# DELETE COMMANDS                #
+##################################
 
+## can refactor this
 @delete.command()
 @click.option("--id", required=True, help="Deletes owners using ID")
 def owner_record(id):
@@ -211,6 +216,7 @@ def owner_record(id):
     else:
         click.echo("Action aborted")
 
+## can refactor this
 @delete.command()
 @click.option('--id', required=True, help="Delete's dog record using ID")
 def dog_record(id):
@@ -228,83 +234,28 @@ def dog_record(id):
     else:
         click.echo("Action aborted")
 
-################################################
-#   GETTER COMMANDS
+##################################
+# READ COMMANDS                  #
+##################################
+
 
 @get.command()
-@click.option("--name", type=click.STRING, required=True, help="Search by name")
-def search_for_toy(name):
-    """Searches toys by names"""
-    result = helpers.search_toy(name)
+@click.option("--name", type=click.STRING, required=True, help="Search by name", prompt=True)
+@click.option("--parameter", type=click.Choice(["dog", "breed", "toy", "owner"]), required=True, prompt=True)
+def search_by_name(name, parameter):
+    result = helpers.search_record(name, parameter)
     helpers.print_all(result)
 
 @get.command()
-@click.option("--name", type=click.STRING, required=True, help="Search by name")
-def search_for_dog(name):
-    """Searches dogs by names"""
-    result = helpers.search_dog(name)
-    helpers.print_all(result)
-
-@get.command()
-@click.option("--name", type=click.STRING, required=True, help="Search by name")
-def search_for_owner(name):
-    """Searches owners by names"""
-    result = helpers.search_owner(name)
-    helpers.print_all(result)
-
-@get.command()
-@click.option("--id", type= click.INT, required=True, help="Use owner ID")
-def info_owner(id):
-    "Return owner info"
-
-    owner = helpers.return_record(id, "owner")
-
-    click.echo(f"Name: {owner.name}")
-    click.echo(f"Phone: {owner.phone}")
-    click.echo(f"Email: {owner.email}")
-    click.echo(f"Address: {owner.address}")
-    click.echo(f"{owner.name} owns the following dogs: ")
-    for dog in owner.dogs:
-        click.echo(dog)
-
-@get.command()
-@click.option("--id", type=click.INT, required=True, help="Use dog ID")
-def info_dog(id):
-    "Return dog info"
-
-    dog = helpers.return_record(id, "dog")
-
-    click.echo(f"Dog Name: {dog.name}")
-    click.echo(f"Age: {dog.age}")
-    click.echo(f"Checked in: {True if dog.checked_in else False}")
-    click.echo(f"Owner: {dog.owner.name}, ID: {dog.owner.id}")
-    click.echo(f"Favorite Toy: {dog.toy.color} {dog.toy.name}")
-    click.echo(f"Breed: {dog.breed.name}")
+@click.option("--id", type=click.INT, required=True, prompt=True)
+@click.option("--parameter", type=click.Choice(["dog", "breed", "toy", "owner"]), required=True, prompt=True)
+def print_details_for(id, parameter):
+    record = helpers.return_record(id, parameter)
+    helpers.print_details(record)
 
 
-@get.command()
-@click.option("--id", type=click.INT, required=True, help="Use toy ID")
-def info_toy(id):
-    "Return toy info"
-    # toy = helpers.return_toy(id)
 
-    toy = helpers.return_record(id, "toy")
-
-    click.echo(f"Toy: {toy.color} {toy.name}")
-    click.echo(f"Broken: {toy.broken}")
-
-
-@get.command()
-@click.option("--id", type=click.INT, required=True, help="Use toy ID")
-def info_breed(id):
-    "Return breed info"
-
-    breed = helpers.return_record(id, "breed")
-
-    click.echo(f"Breed: {breed.name}")
-    click.echo(f"Hair Length: {breed.hair_length}")
-
-
+## can refactor this
 @get.command()
 def most_breeds():
     """Return breeds from most to least number in the daycare"""
@@ -314,7 +265,7 @@ def most_breeds():
     breed_dict = sorted(breed_dict.items(), key=lambda x: x[1], reverse=True)
     helpers.print_all(breed_dict)
 
-
+## can refactor this
 @get.command()
 def most_favorite_toys():
     """Returns dog's favorite toys from most to least favorite"""
@@ -327,7 +278,7 @@ def most_favorite_toys():
     click.echo("Toys, # of dogs that like it")
     helpers.print_all(toy_dict)
 
-
+## can refactor this
 @get.command()
 def most_dog_owners():
     """Returns the owners with the most to least amount of dogs"""
@@ -347,34 +298,12 @@ def most_dog_owners():
 
 
 @get.command()
-@click.option("--parameter", "-p", type=click.Choice(["dog", "owner", "breed", "toy"]), required=True, help="select the type of record to browse")
+@click.option("--parameter", "-p", type=click.Choice(["dog", "owner", "breed", "toy"]), required=True, help="select the type of record to browse", prompt=True)
 def all_records_by(parameter):
     """Prints out all records based on input parameter"""
     records = helpers.get_all(parameter)
     helpers.print_all(records)
 
-
-# @get.command()
-# def all_dogs():
-#     """Prints out all the dogs in the daycare center"""
-#     dogs = helpers.all_dogs()
-
-#     helpers.print_all(dogs)
-
-# @get.command(short_help="prints all owners")
-# def all_owners():
-#     """Prints out all the owners in the daycare center"""
-    
-#     owners = helpers.all_owners()
-#     helpers.print_all(owners)
-
-
-# @get.command()
-# def all_toys():
-#     """Prints out all the toys in the daycare center"""
-    
-#     toys = helpers.all_toys()
-#     helpers.print_all(toys)
 
 if __name__ == "__main__":
     cli()
