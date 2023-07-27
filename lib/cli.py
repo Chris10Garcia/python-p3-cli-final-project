@@ -40,18 +40,22 @@ def create():
 
 @update.command()
 @click.option("--id", required=True, type=click.INT)
-@click.option("--attribute", "-attr", required=True, type=click.Choice(["name", "phone", "email", "address"]))
-@click.option("--value", "-v", required=True)
-def property_owner(attribute, id, value):
+@click.option("--attribute", "-attr", required=True, type=click.Choice(["name", "phone", "email", "address"]), )
+@click.option("--value", "-v", required=True, help="multi value inputs must be covered in quotes", metavar="'VALUE IN QUOTES'", type=click.STRING)
+def owner_attribute(attribute, id, value):
+    """Change the details of an exisiting owner"""
     owner = helpers.return_record(id, "owner")
 
     message = f"Changing {getattr(owner, 'name')}'s {attribute} from {getattr(owner, attribute)} to {value}"
 
-    confirm = click.confirm(message)
+    confirm_update = click.confirm(message)
 
-
-    pass
-
+    if confirm_update:
+        setattr(owner, attribute, value)
+        updated_owner = helpers.update_record(owner)
+        click.echo(f"{updated_owner.name}'s {attribute} is now {getattr(updated_owner, attribute)}")
+    else:
+        click.echo("Update aborted")
 
 
 
@@ -69,7 +73,8 @@ def dog_owner(dog_id, new_owner_id):
     confirm_update = click.confirm(message)
 
     if confirm_update:
-        updated_dog = helpers.update_dog_owner(dog, new_owner)
+        dog.owner_id = new_owner.id
+        updated_dog = helpers.update_record(dog)
         click.echo("Update successful")
         click.echo(f"{updated_dog} now has owner {updated_dog.owner}")
     else:

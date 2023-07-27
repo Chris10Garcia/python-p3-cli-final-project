@@ -17,13 +17,11 @@ MODELS_DICT = {
         "owner" : Owner
     }
 
-
-def update_dog_owner(dog, new_owner):
-    
-    dog.owner_id = new_owner.id
-    session.add(dog)
+def update_record(record):
+    session.add(record)
     session.commit()
-    return dog
+    return record
+
 
 def delete_record(id, parameter):
     model = MODELS_DICT[parameter]

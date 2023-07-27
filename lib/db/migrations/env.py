@@ -69,7 +69,7 @@ def run_migrations_online() -> None:
             connection=connection, 
             target_metadata=target_metadata, 
             render_as_batch=True,
-            compare_type = True
+            compare_type = True #this is default False. Helps to compare column types for autogeneration
         )
 
         with context.begin_transaction():
