@@ -38,7 +38,7 @@ class Breed(Base):
     # default save-update, merge is sufficient enough
 
     def __repr__(self):
-        return f"<BREED: {self.name} >"
+        return f"<BREED: {self.name}>"
 
 
 class Toy(Base):

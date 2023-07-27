@@ -35,6 +35,60 @@ def create():
 #   CREATE COMMANDS
 
 
+@create.command()
+@click.option("--name", "-n", required=True, prompt=True)
+@click.option("--age", required=True, type = click.INT, prompt=True)
+@click.option("--temperament", "-temper", required=True, prompt=True)
+@click.option("--owner-id",required=True, type=click.INT, prompt=True)
+@click.option("--breed-id", required=True, type=click.INT, prompt=True)
+@click.option("--toy-id", required=True, type=click.INT, prompt=True)
+def new_dog(name, age, temperament, owner_id, breed_id, toy_id):
+    """Creates new dog, OWNER MUST EXIST IN DB"""
+
+    owner = helpers.return_record(owner_id, "owner")
+    toy = helpers.return_record(toy_id, "toy")
+    breed = helpers.return_record(breed_id, "breed")
+    click.echo(f"New dog {name} will be added to: {owner}.")
+    click.echo(f"Their breed will be {breed}.")
+    click.echo(f"Their favorite toy will be {toy}")
+
+    new_record = {
+        "name": name,
+        "age": age,
+        "checked_in": True,
+        "temperament": temperament,
+        "days_checked_in" : 0,
+        "owner_id" : owner_id,
+        "breed_id" : breed_id,
+        "toy_id" : toy_id
+    }
+    
+    helpers.create_record(new_record, "dog")
+
+
+
+
+@create.command()
+@click.option("--name", "-n", required=True)
+@click.option("--phone", "-p", required=True)
+@click.option("--email", "-em", required=True)
+@click.option("--address", "-a", required=True)
+def new_owner(name, phone, email, address):
+    """Creates new owner"""
+    new_record = {
+        "name": name,
+        "phone": phone,
+        "email": email,
+        "address": address
+    }
+    
+    helpers.create_record(new_record, "owner")
+
+
+# create code to add new dog
+# name, age, checekd_in, days_checked_in, temperament
+# need to first ask if the owner exists, if not abort
+
 ################################################
 #   UPDATE COMMANDS
 
@@ -59,14 +113,17 @@ def attribute_dog(attribute, id, value):
         item = helpers.return_record(value, param)
         click.echo(item)
 
+    # TUPLE USED HERE
     # converts checked_in answers to boolean responds
+    truthy = ('y', "true", "yes", "t", "1")
+    falsy = ('n', "false", "no", "f", "0")
     if attribute == "checked_in":
-        if value.lower() in ('y', "true", "yes", "t", "1"):
+        if value.lower() in truthy:
             value = True
-        elif value.lower() in ('n', "false", "no", "f", "0"):
+        elif value.lower() in falsy:
             value = False
         else:
-            raise click.BadParameter(f"checked_in attribute requires True/False, t/f, yes/no, y/n, or 1/0 answers")
+            raise click.BadParameter(f"checked_in attribute requires true/false, t/f, yes/no, y/n, or 1/0 answers (case insensitive)")
 
     # checks age if it's an integer
     if attribute == "age":
@@ -264,6 +321,7 @@ def most_favorite_toys():
     dogs = helpers.get_all("dog")
     toy_dict = helpers.build_count_dict(dogs, "toy")
 
+    # TUPLE USED HERE
     toy_dict = sorted(toy_dict.items(), key=lambda x : x[1], reverse=True)
     click.echo("Here are the most to least favorite toys in the daycare")
     click.echo("Toys, # of dogs that like it")
@@ -277,6 +335,8 @@ def most_dog_owners():
     owners = helpers.get_all("owner")
   
     owner_dict = {owner.name : len(owner.dogs) for owner in owners}
+
+    # TUPLE USED HERE
     owner_dict = sorted(owner_dict.items(), key=lambda x :x[1], reverse=True) 
     #dict.items() returns a tuple. Use index to access 2nd element to sort
 

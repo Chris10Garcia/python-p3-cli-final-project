@@ -5,22 +5,14 @@ CLI Dog Day Care
 To do list
 C R U D
 
+
+COMPLETE
+
 CREATE
 - new dog record
 - new owner record
-- new toy?
-
-UPDATE
-- change attributes of
-    - owner name
-    - dog name
-- update a dog's favorite toy
-- update a dog's age
-- update a dog's name
-- (optional) change checked in status
 
 
-COMPLETE
 READ
 - search for by name: dog, owner, toy
 - browse dog info by id
@@ -38,3 +30,8 @@ DELETE
 - delete a dog
 - delete an owner (will remove dogs)
 
+UPDATE
+- change attributes of
+    - owner (name, )
+    - dog (name, age, temperament, checked_in, breed_id, toy_id)
+- owner of dog

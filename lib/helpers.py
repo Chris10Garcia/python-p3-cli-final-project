@@ -17,6 +17,21 @@ MODELS_DICT = {
         "owner" : Owner
     }
 
+def create_record(record, parameter):
+    model = MODELS_DICT[parameter]
+
+    confirm = click.confirm(f"Confirm to add a new {parameter} with the following details? \n{record}")
+    
+    if confirm:
+        new_record = model(**record)
+        session.add(new_record)
+        session.commit()
+        click.echo(f"The following has been added: {new_record}")
+    else:
+        click.echo("Action aborted")
+
+
+
 def update_record(record):
     session.add(record)
     session.commit()
