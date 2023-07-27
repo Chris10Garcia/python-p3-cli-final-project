@@ -13,7 +13,7 @@ class Owner(Base):
 
     id = Column(Integer(), primary_key=True)
     name = Column(String())
-    phone = Column(Integer())
+    phone = Column(String()) #changed this to string due to faker producing phone numbers with alpha letters
     email = Column(String(80))
     address = Column(String())
 
