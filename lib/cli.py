@@ -40,9 +40,60 @@ def create():
 
 @update.command()
 @click.option("--id", required=True, type=click.INT)
+@click.option("--attribute", "-attr", required=True, type=click.Choice(["name", "age", "temperament", "checked_in", "breed_id", "toy_id"]), )
+@click.option("--value", "-v", required=True, help="multi value inputs must be covered in quotes", metavar="'VALUE IN QUOTES'")
+def attribute_dog(attribute, id, value):
+    """Change the details of an exisiting owner"""
+    dog = helpers.return_record(id, "dog")
+
+
+    # checks to see if the toy or breed exists in the DB
+    param = None
+    if attribute == "breed_id":
+        param = "breed_id".replace("_id", "")
+
+    elif attribute == "toy_id":
+        param = "toy_id".replace("_id", "")
+
+    if param:
+        item = helpers.return_record(value, param)
+        click.echo(item)
+
+    # converts checked_in answers to boolean responds
+    if attribute == "checked_in":
+        if value.lower() in ('y', "true", "yes", "t", "1"):
+            value = True
+        elif value.lower() in ('n', "false", "no", "f", "0"):
+            value = False
+        else:
+            raise click.BadParameter(f"checked_in attribute requires True/False, t/f, yes/no, y/n, or 1/0 answers")
+
+    # checks age if it's an integer
+    if attribute == "age":
+        try:
+            value = int(value, 10)
+        except:
+            raise click.BadParameter(f"age attributes requires an integer value")
+
+    message = f"Changing {getattr(dog, 'name')}'s {attribute} from {getattr(dog, attribute)} to {value}"
+
+    confirm_update = click.confirm(message)
+
+    if confirm_update:
+        setattr(dog, attribute, value)
+        updated_dog = helpers.update_record(dog)
+        click.echo(f"{updated_dog.name}'s {attribute} is now {getattr(updated_dog, attribute)}")
+    else:
+        click.echo("Update aborted")
+
+
+
+
+@update.command()
+@click.option("--id", required=True, type=click.INT)
 @click.option("--attribute", "-attr", required=True, type=click.Choice(["name", "phone", "email", "address"]), )
 @click.option("--value", "-v", required=True, help="multi value inputs must be covered in quotes", metavar="'VALUE IN QUOTES'", type=click.STRING)
-def owner_attribute(attribute, id, value):
+def attribute_owner(attribute, id, value):
     """Change the details of an exisiting owner"""
     owner = helpers.return_record(id, "owner")
 
