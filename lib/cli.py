@@ -37,6 +37,8 @@ def create():
 
 ## CREATES NEW DOG
 
+
+
 ## can refactor this????
 @create.command()
 @click.option("--name", "-n", required=True, prompt=True)
@@ -197,42 +199,28 @@ def dog_owner(dog_id, new_owner_id):
 # DELETE COMMANDS                #
 ##################################
 
-## can refactor this
 @delete.command()
-@click.option("--id", required=True, help="Deletes owners using ID")
-def owner_record(id):
-    """Delete's the owner record and dogs that they own from the system"""
-
-    owner = helpers.return_record(id, "owner")
-    click.echo(owner)
-    for dog in owner.dogs:
-        click.echo(dog)
-
-    confirm_delete = click.confirm("Are you sure you want to delete this record and subrecords?")
+@click.option("--id", type=click.INT, required=True, prompt=True)
+@click.option("--parameter", type=click.Choice(("dog", "owner")), required=True, prompt=True)
+def record_from_db(id, parameter):
+    record = helpers.return_record(id, parameter)
     
+    click.echo(record)
+    if parameter == "owner":
+        click.echo("Deleting an owner record will also delete the following dog records")
+        for dog in record.dogs:
+            click.echo(dog)
+    
+
+    confirm_delete = click.confirm("Are you sure you want to delete the above record(s)?")
+
     if confirm_delete:
-        helpers.delete_record(id, "owner")
+        helpers.delete_record(id, parameter)
         click.echo("Record successfully deleted")
     else:
         click.echo("Action aborted")
 
-## can refactor this
-@delete.command()
-@click.option('--id', required=True, help="Delete's dog record using ID")
-def dog_record(id):
-    """Delete's the dog record from the owner. Owner record stays in the system"""
 
-    # pull record of dog
-    # confirm if you want to delete this dog
-    dog = helpers.return_record(id, "dog")
-    click.echo(dog)
-    confirm_delete = click.confirm("Are you sure you want to delete this record?")
-    
-    if confirm_delete:
-        helpers.delete_record(id, "dog")
-        click.echo("Record successfully deleted")
-    else:
-        click.echo("Action aborted")
 
 ##################################
 # READ COMMANDS                  #
@@ -246,6 +234,7 @@ def search_by_name(name, parameter):
     result = helpers.search_record(name, parameter)
     helpers.print_all(result)
 
+
 @get.command()
 @click.option("--id", type=click.INT, required=True, prompt=True)
 @click.option("--parameter", type=click.Choice(["dog", "breed", "toy", "owner"]), required=True, prompt=True)
@@ -253,48 +242,25 @@ def print_details_for(id, parameter):
     record = helpers.return_record(id, parameter)
     helpers.print_details(record)
 
-
-
-## can refactor this
+#parameter can be only breed, toy, dogs
 @get.command()
-def most_breeds():
-    """Return breeds from most to least number in the daycare"""
-    dogs = helpers.get_all("dog")
-    breed_dict = helpers.build_count_dict(dogs, "breed")
+@click.option("--parameter", type=click.Choice(("popular_breed", "favorite_toy", "most_dog")), required=True, prompt=True)
+def most_by(parameter):
+    if parameter == "popular_breed" or parameter == "favorite_toy":
+        dogs = helpers.get_all("dog")
+        param_formated = parameter[parameter.find("_")+1:]
+        records_dict = helpers.build_count_dict(dogs, param_formated)
+        message = "Here are the most popular breeds" if parameter == "popular_breed" else "Here are the most favorited toys"
+    else:
+        owners = helpers.get_all("owner")
+        records_dict = {owner.name : len(owner.dogs) for owner in owners}
+        message = "Here are the owners with the most dogs"
 
-    breed_dict = sorted(breed_dict.items(), key=lambda x: x[1], reverse=True)
-    helpers.print_all(breed_dict)
+    sorted_records = sorted(records_dict.items(), key=lambda x: x[1], reverse=True)
 
-## can refactor this
-@get.command()
-def most_favorite_toys():
-    """Returns dog's favorite toys from most to least favorite"""
-    dogs = helpers.get_all("dog")
-    toy_dict = helpers.build_count_dict(dogs, "toy")
+    click.echo(message)
+    helpers.print_all(sorted_records)
 
-    # TUPLE USED HERE
-    toy_dict = sorted(toy_dict.items(), key=lambda x : x[1], reverse=True)
-    click.echo("Here are the most to least favorite toys in the daycare")
-    click.echo("Toys, # of dogs that like it")
-    helpers.print_all(toy_dict)
-
-## can refactor this
-@get.command()
-def most_dog_owners():
-    """Returns the owners with the most to least amount of dogs"""
-
-    owners = helpers.get_all("owner")
-  
-    owner_dict = {owner.name : len(owner.dogs) for owner in owners}
-
-    # TUPLE USED HERE
-    owner_dict = sorted(owner_dict.items(), key=lambda x :x[1], reverse=True) 
-    #dict.items() returns a tuple. Use index to access 2nd element to sort
-
-
-    click.echo("Here is the list of owners with most to least amount of dogs:")
-    click.echo("Owner, # of dogs")
-    helpers.print_all(owner_dict)
 
 
 @get.command()

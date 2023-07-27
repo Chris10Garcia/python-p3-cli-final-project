@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
 
 from db.models import Owner, Dog, Breed, Toy
@@ -102,5 +102,3 @@ def print_details(record_obj):
         click.echo("This person owns the following dogs")
         for dog in record_obj.dogs:
             click.echo(dog)
-
-
