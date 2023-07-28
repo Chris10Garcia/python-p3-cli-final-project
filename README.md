@@ -42,7 +42,7 @@ Thank you for visiting my repo and checking my project out!
 ## Source and Credits
 
 Modules
-faker:
+Faker:
 https://faker.readthedocs.io/en/master/index.html 
 
 SQLALc
