@@ -1,6 +1,6 @@
 # Phase 3 Project: Flatiron Dog Daycare CLI Application
 
-[Preview of CLI functioning]()<!-- need a .gif pushed to current github repo-->
+[Preview of CLI functioning](https://github.com/Chris10Garcia/python-p3-cli-final-project/blob/main/lib/ezgif.com-video-to-gif.gif)
 
 
 ## Table of Content
