@@ -1,5 +1,4 @@
-# Phase 3 CLI Project Template: Flatiron Dog Daycare CLI Application
-
+# Phase 3 CLI Project: Flatiron Dog Daycare CLI Application
 
 [Preview of CLI functioning]()<!-- need a .gif pushed to current github repo-->
 
@@ -15,13 +14,13 @@
 
 Using Python, I created a command line interface (CLI) application that performs CRUD actions (create read update delete) on a database. 
 
-This application handles managing a "dog daycare center". Four tables contain Dog, Breed, Toy, and Owner entities. A user can perform various actions such as creating new dog or owner records, retreiving multiple records, printing details of a single record, updating various attributes, and deleting records. 
+This application handles managing a "dog daycare center". Four tables contain Dog, Breed, Toy, and Owner entities. A user can perform various actions such as creating new dog or owner records, retrieving multiple records, printing details of a single record, updating various attributes, and deleting records. 
 
 The packages used for this project are as follows:
 - The Click Python package is used to handle creating the CLI commands and tasks.
-- Sqlite is utilzied as the datebase.
+- SQLite is utilized as the database.
 - The Faker Python package is used to seed data within the database.
-- SQLAlchemy is utlized as the Python SQL toolkit and object relational mapper. 
+- SQLAlchemy is utilized as the Python SQL toolkit and object relational mapper. 
 - Alembic is utilized as the database migration tool.
 
 
@@ -40,6 +39,7 @@ Please note, Pipenv is required. See [here](https://pipenv.pypa.io/en/latest/ins
 To start the CLI app, next `run python cli.py` (ensure you're in the lib folder). From there, the help page will display and you can follow the instructions there as to perform the actions you want from the app.
 
 Thank you for visiting my repo and checking my project out!
+
 
 ## Source and Credits
 
