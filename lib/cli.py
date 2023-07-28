@@ -123,7 +123,6 @@ def most_by(parameter):
     helpers.print_all(sorted_records)
 
 
-
 @get.command()
 @click.option(*CLICK_PARAM_SETTING_ALL[0], **CLICK_PARAM_SETTING_ALL[1])
 def all_records_for(parameter):
