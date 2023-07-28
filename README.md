@@ -1,4 +1,4 @@
-# Phase 3 CLI Project: Flatiron Dog Daycare CLI Application
+# Phase 3 Project: Flatiron Dog Daycare CLI Application
 
 [Preview of CLI functioning]()<!-- need a .gif pushed to current github repo-->
 
@@ -19,7 +19,7 @@ This application handles managing a "dog daycare center". Four tables contain Do
 The packages used for this project are as follows:
 - The Click Python package is used to handle creating the CLI commands and tasks.
 - SQLite is utilized as the database.
-- The Faker Python package is used to seed data within the database.
+- The Faker Python package is used to seed data into the database.
 - SQLAlchemy is utilized as the Python SQL toolkit and object relational mapper. 
 - Alembic is utilized as the database migration tool.
 
@@ -29,14 +29,15 @@ The packages used for this project are as follows:
 Please note, Pipenv is required. See [here](https://pipenv.pypa.io/en/latest/installation/) for installing pipenv. Lastly, my project uses python_version = "3.8.13".
 
 - Clone this repo
+- `cd python-p3-cli-final-project` (or `cd` into the name of the directory you gave it)
 - Run `pipenv install`
 - Run `pipenv shell`
 - `cd lib/db`
 - Run `alembic upgrade head`
 - Run `python seed.py`
-- `cd ..` 
+- `cd ..`
 
-To start the CLI app, next `run python cli.py` (ensure you're in the lib folder). From there, the help page will display and you can follow the instructions there as to perform the actions you want from the app.
+To start the CLI app, next `run python cli.py` (ensure you're in the lib folder and with the virtual environment running). From there, the help page will display and you can follow the instructions there as to perform the actions you want from the app.
 
 Thank you for visiting my repo and checking my project out!
 
@@ -44,7 +45,7 @@ Thank you for visiting my repo and checking my project out!
 ## Source and Credits
 
 Modules
-- [Faker] (https://faker.readthedocs.io/en/master/index.html)
+- [Faker](https://faker.readthedocs.io/en/master/index.html)
 
 - [SQLAlchemy](https://www.sqlalchemy.org/)
 
