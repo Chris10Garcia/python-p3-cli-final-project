@@ -3,6 +3,7 @@
 import click
 import helpers
 
+CLICK_ID_SETTINGS = ("--id", {"required": True, "type" : click.INT, "prompt" : "Current ID", "help" : "Enter ID of record as an INT"})
 
 @click.group()
 def cli():
@@ -108,7 +109,7 @@ def search_by_name(name, parameter):
 
 
 @get.command()
-@click.option("--id", type=click.INT, required=True, prompt=True)
+@click.option(CLICK_ID_SETTINGS[0], **CLICK_ID_SETTINGS[1])
 @click.option("--parameter", type=click.Choice(["dog", "breed", "toy", "owner"]), required=True, prompt=True)
 def print_details_for(id, parameter):
     """NEED TO UPDATE THIS"""
@@ -153,8 +154,8 @@ def all_records_by(parameter):
 ###########################
 # TESTING CODE OUT. TRYING TO REFACTOR UPDATING ATTRIBUTES TO A MORE PROGRAMATTIC WAY
 @update.command()
-@click.option("--id", required=True, type=click.INT, prompt=True)
-@click.option("--parameter", type=click.Choice(("dog", "owner")), prompt=True)
+@click.option(CLICK_ID_SETTINGS[0], **CLICK_ID_SETTINGS[1])
+@click.option("--parameter", type=click.Choice(("dog", "owner", "toy", "breed")), prompt=True)
 def test_update(id, parameter):
     """NEED TO UPDATE THIS"""
     record = helpers.return_record(id, parameter)
@@ -164,7 +165,7 @@ def test_update(id, parameter):
     attribute = click.prompt("Pick attribute to update", type=click.Choice(keys))
     value = click.prompt(f"What will be the new value of this {attribute} property")
 
-    # create function that validates inputs
+    helpers.validate_inputs(attribute, value)
 
     helpers.confirm_change(record, attribute, value)
 
@@ -174,7 +175,7 @@ def test_update(id, parameter):
 
 ## UPDATES DOG ATTRIBUTES
 @update.command()
-@click.option("--id", required=True, type=click.INT)
+@click.option(CLICK_ID_SETTINGS[0], **CLICK_ID_SETTINGS[1])
 @click.option("--attribute", "-attr", required=True, type=click.Choice(["name", "age", "temperament", "checked_in", "breed_id", "toy_id"]), )
 @click.option("--value", "-v", required=True, help="multi value inputs must be covered in quotes", metavar="'VALUE IN QUOTES'")
 def attribute_dog(attribute, id, value):
@@ -227,47 +228,47 @@ def attribute_dog(attribute, id, value):
 
 
 ## UPDATES OWNER ATTRIBUTES
-@update.command()
-@click.option("--id", required=True, type=click.INT)
-@click.option("--attribute", "-attr", required=True, type=click.Choice(["name", "phone", "email", "address"]), )
-@click.option("--value", "-v", required=True, help="multi value inputs must be covered in quotes", metavar="'VALUE IN QUOTES'", type=click.STRING)
-def attribute_owner(attribute, id, value):
-    """Change the details of an exisiting owner"""
-    owner = helpers.return_record(id, "owner")
+# @update.command()
+# @click.option(CLICK_ID_SETTINGS[0], **CLICK_ID_SETTINGS[1])
+# @click.option("--attribute", "-attr", required=True, type=click.Choice(["name", "phone", "email", "address"]), )
+# @click.option("--value", "-v", required=True, help="multi value inputs must be covered in quotes", metavar="'VALUE IN QUOTES'", type=click.STRING)
+# def attribute_owner(attribute, id, value):
+#     """Change the details of an exisiting owner"""
+#     owner = helpers.return_record(id, "owner")
 
-    message = f"Changing {getattr(owner, 'name')}'s {attribute} from {getattr(owner, attribute)} to {value}"
+#     message = f"Changing {getattr(owner, 'name')}'s {attribute} from {getattr(owner, attribute)} to {value}"
 
-    confirm_update = click.confirm(message)
+#     confirm_update = click.confirm(message)
 
-    if confirm_update:
-        setattr(owner, attribute, value)
-        updated_owner = helpers.update_record(owner)
-        click.echo(f"{updated_owner.name}'s {attribute} is now {getattr(updated_owner, attribute)}")
-    else:
-        click.echo("Update aborted")
+#     if confirm_update:
+#         setattr(owner, attribute, value)
+#         updated_owner = helpers.update_record(owner)
+#         click.echo(f"{updated_owner.name}'s {attribute} is now {getattr(updated_owner, attribute)}")
+#     else:
+#         click.echo("Update aborted")
 
 
 
-@update.command()
-@click.option("--dog-id", required=True, type=click.INT)
-@click.option("--new-owner-id", required=True, type=click.INT)
-def dog_owner(dog_id, new_owner_id):
-    """Updates the owner of the dog."""
+# @update.command()
+# @click.option("--dog-id", required=True, type=click.INT)
+# @click.option("--new-owner-id", required=True, type=click.INT)
+# def dog_owner(dog_id, new_owner_id):
+#     """Updates the owner of the dog."""
 
-    new_owner = helpers.return_record(new_owner_id, "owner")
-    dog = helpers.return_record(dog_id, "dog")
+#     new_owner = helpers.return_record(new_owner_id, "owner")
+#     dog = helpers.return_record(dog_id, "dog")
     
-    message = f"Update DOG '{dog.name}' from it's OWNER {dog.owner.name}, ID {dog.owner.id} to NEW OWNER {new_owner.name}, ID {new_owner.id}"
+#     message = f"Update DOG '{dog.name}' from it's OWNER {dog.owner.name}, ID {dog.owner.id} to NEW OWNER {new_owner.name}, ID {new_owner.id}"
 
-    confirm_update = click.confirm(message)
+#     confirm_update = click.confirm(message)
 
-    if confirm_update:
-        dog.owner_id = new_owner.id
-        updated_dog = helpers.update_record(dog)
-        click.echo("Update successful")
-        click.echo(f"{updated_dog} now has owner {updated_dog.owner}")
-    else:
-        click.echo("Update aborted")
+#     if confirm_update:
+#         dog.owner_id = new_owner.id
+#         updated_dog = helpers.update_record(dog)
+#         click.echo("Update successful")
+#         click.echo(f"{updated_dog} now has owner {updated_dog.owner}")
+#     else:
+#         click.echo("Update aborted")
 
 
 
@@ -276,7 +277,7 @@ def dog_owner(dog_id, new_owner_id):
 ##################################
 
 @delete.command()
-@click.option("--id", type=click.INT, required=True, prompt=True)
+@click.option(CLICK_ID_SETTINGS[0], **CLICK_ID_SETTINGS[1])
 @click.option("--parameter", type=click.Choice(("dog", "owner")), required=True, prompt=True)
 def record_from_db(id, parameter):
     record = helpers.return_record(id, parameter)

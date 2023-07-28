@@ -20,16 +20,37 @@ MODELS_DICT = {
 def validate_inputs(attribute, value):
     #check for attributes requiring INTs
     if attribute == "breed_id" or attribute == "toy_id" or attribute == "owner_id" or attribute == "age" or attribute == "days_checked_in":
-        
-        pass
-        
-    if attribute == "age" or attribute == "":
+        try:
+            int(value, 10)
+        except:
+            raise click.BadParameter(message = f"The {attribute} property require's an integer value")
+    
+    #checks if toy, owner or breed exits
+    if attribute == "breed_id" or attribute == "toy_id" or attribute == "owner_id":
         return_record(value, attribute.replace("_id", ""))
-        pass
+
+    truthy = ('y', "true", "yes", "t", "1")
+    falsy = ('n', "false", "no", "f", "0")
+    if attribute == "checked_in" or attribute == "broken":
+        if value.lower() in truthy:
+            value = True
+        elif value.lower() in falsy:
+            value = False
+        else:
+            raise click.BadParameter(f"checked_in attribute requires true/false, t/f, yes/no, y/n, or 1/0 answers (case insensitive)")
+
 
 def confirm_change(record, attribute, value):
 
-    message = f"Changing {getattr(record, 'name')}'s {attribute} from {getattr(record, attribute)} to {value}"
+    extra_info_new = None
+    extra_info_current = None
+    if attribute == "breed_id" or attribute == "toy_id" or attribute == "owner_id":
+        current_owner_breed_toy = return_record(getattr(record, attribute), attribute.replace("_id", ""))
+        new_owner_breed_toy = return_record(value, attribute.replace("_id", ""))
+        extra_info_new = f" ({new_owner_breed_toy})"
+        extra_info_current = f" ({current_owner_breed_toy})"
+
+    message = f"Changing {getattr(record, 'name')}'s {attribute} from {getattr(record, attribute)}{extra_info_current if extra_info_current else ''} to {value}{extra_info_new if extra_info_new else ''}"
 
     confirm_update = click.confirm(message)
 
