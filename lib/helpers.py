@@ -17,6 +17,38 @@ MODELS_DICT = {
         "owner" : Owner
     }
 
+def validate_inputs(attribute, value):
+    #check for attributes requiring INTs
+    if attribute == "breed_id" or attribute == "toy_id" or attribute == "owner_id" or attribute == "age" or attribute == "days_checked_in":
+        
+        pass
+        
+    if attribute == "age" or attribute == "":
+        return_record(value, attribute.replace("_id", ""))
+        pass
+
+def confirm_change(record, attribute, value):
+
+    message = f"Changing {getattr(record, 'name')}'s {attribute} from {getattr(record, attribute)} to {value}"
+
+    confirm_update = click.confirm(message)
+
+    if confirm_update:
+        setattr(record, attribute, value)
+        updated_record = update_record(record)
+        click.echo(f"{updated_record.name}'s {attribute} is now {getattr(updated_record, attribute)}")
+    else:
+        click.echo("Update aborted")
+
+
+def return_attributes(parameter):
+    model = MODELS_DICT[parameter]
+
+    keys = [key for key in model.__dict__ 
+            if not key[0] == "_" and not key == "id" and not key == "owner" and not key == "dogs" and not key == "toy" and not key == "breed"]
+
+    return keys
+
 def create_record(record, parameter):
     model = MODELS_DICT[parameter]
 
@@ -86,6 +118,8 @@ def print_all(data):
         counter += 1
     click.echo("You have reached the end of the list")
 
+
+##
 def print_details(record_obj):
 
     record_dict = record_obj.__dict__

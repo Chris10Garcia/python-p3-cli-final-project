@@ -159,10 +159,16 @@ def test_update(id, parameter):
     """NEED TO UPDATE THIS"""
     record = helpers.return_record(id, parameter)
 
-    keys = [key for key in record.__dict__ if not key == "_sa_instance_state" and not key == "id"]
+    keys = helpers.return_attributes(parameter)
     # results = [click.prompt(key) for key in keys]
     attribute = click.prompt("Pick attribute to update", type=click.Choice(keys))
-    click.echo(attribute)
+    value = click.prompt(f"What will be the new value of this {attribute} property")
+
+    # create function that validates inputs
+
+    helpers.confirm_change(record, attribute, value)
+
+
 #######################################
 
 
