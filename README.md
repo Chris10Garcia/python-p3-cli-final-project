@@ -37,7 +37,7 @@ Please note, Pipenv is required. See [here](https://pipenv.pypa.io/en/latest/ins
 - Run `python seed.py`
 - `cd ..`
 
-To start the CLI app, next `run python cli.py` (ensure you're in the lib folder and with the virtual environment running). From there, the help page will display and you can follow the instructions there as to perform the actions you want from the app.
+To start the CLI app, next run `python cli.py` (ensure you're in the lib folder and with the virtual environment running). From there, the help page will display and you can follow the instructions there as to perform the actions you want from the app.
 
 Thank you for visiting my repo and checking my project out!
 
