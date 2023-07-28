@@ -1,7 +1,7 @@
 # Phase 3 CLI Project Template: Flatiron Dog Daycare CLI Application
 
 
-![Preview of CLI functioning]()<!-- need a .gif pushed to current github repo-->
+[Preview of CLI functioning]()<!-- need a .gif pushed to current github repo-->
 
 
 ## Table of Content
@@ -15,7 +15,7 @@
 
 Using Python, I created a command line interface (CLI) application that performs CRUD actions (create read update delete) on a database. 
 
-This application handles managing a "dog daycare center". Within the database, 4 tables are created that houses Dog, Breed, Toy, and Owner entities. A user can perform various CRUD actions such as creating new dog or owner records, retreiving multiple records, printing details of a single record, updating various attributes, and deleting records. 
+This application handles managing a "dog daycare center". Four tables contain Dog, Breed, Toy, and Owner entities. A user can perform various actions such as creating new dog or owner records, retreiving multiple records, printing details of a single record, updating various attributes, and deleting records. 
 
 The packages used for this project are as follows:
 - The Click Python package is used to handle creating the CLI commands and tasks.
@@ -27,38 +27,33 @@ The packages used for this project are as follows:
 
 ## Get Started
 
-- Clone this repo
-- Run pipenv install
-- Run pipenv shell
-- cd lib/db
-- run alembic upgrade head
-- run python seed.py
-- cd ..
+Please note, Pipenv is required. See [here](https://pipenv.pypa.io/en/latest/installation/) for installing pipenv. Lastly, my project uses python_version = "3.8.13".
 
-To start the CLI app, next run python cli.py (ensure you're in the lib folder). From there, the help page will display and you can follow the instructions there as to perform the actions you want from the app.
+- Clone this repo
+- Run `pipenv install`
+- Run `pipenv shell`
+- `cd lib/db`
+- Run `alembic upgrade head`
+- Run `python seed.py`
+- `cd ..` 
+
+To start the CLI app, next `run python cli.py` (ensure you're in the lib folder). From there, the help page will display and you can follow the instructions there as to perform the actions you want from the app.
 
 Thank you for visiting my repo and checking my project out!
 
 ## Source and Credits
 
 Modules
-Faker:
-https://faker.readthedocs.io/en/master/index.html 
+- [Faker] (https://faker.readthedocs.io/en/master/index.html)
 
-SQLALc
-<!-- link -->
+- [SQLAlchemy](https://www.sqlalchemy.org/)
 
-Alembic
-<!-- link -->
+- [Alembic](https://alembic.sqlalchemy.org/en/latest/)
 
-Click
-<!-- link -->
+- [Click](https://click.palletsprojects.com/en/8.1.x/)
 
+Miscellaneous
+- [Dog Toys](https://www.thesprucepets.com/best-dog-toys-4151137)
 
-Misc
-dog toys
-https://www.thesprucepets.com/best-dog-toys-4151137
-
-dog breeds
-https://github.com/dariusk/corpora/blob/master/data/animals/dogs.json 
+- [Dog Breeds](https://github.com/dariusk/corpora/blob/master/data/animals/dogs.json)
 
