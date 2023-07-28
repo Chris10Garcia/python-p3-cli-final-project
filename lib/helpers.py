@@ -10,6 +10,7 @@ Session = sessionmaker(bind = engine)
 session = Session()
 
 
+# Provides an easy way to select the Class and abstract helper functions
 MODELS_DICT = {
         "dog" : Dog,
         "toy" : Toy,
@@ -18,7 +19,12 @@ MODELS_DICT = {
     }
 
 def validate_inputs(attribute, value):
-    #check for attributes requiring INTs
+    """
+    Validates an attribue's value.
+    Checks for int's, if a record exisits, and boolean fasly / truthy
+    """
+
+    #checks for int
     if attribute == "breed_id" or attribute == "toy_id" or attribute == "owner_id" or attribute == "age" or attribute == "days_checked_in":
         try:
             int(value, 10)
@@ -29,7 +35,9 @@ def validate_inputs(attribute, value):
     if attribute == "breed_id" or attribute == "toy_id" or attribute == "owner_id":
         return_record(value, attribute.replace("_id", ""))
 
+
     #check and fixes for truth or false
+    #can fix and return boolean
     truthy = ('y', "true", "yes", "t", "1")
     falsy = ('n', "false", "no", "f", "0")
     if attribute == "checked_in" or attribute == "broken":
@@ -44,7 +52,12 @@ def validate_inputs(attribute, value):
 
 
 def confirm_change(record, attribute, value):
+    """
+    Updates the db object with the provided attribute and value.
+    Handles toy, breed, and owner changes.
+    """
 
+    # formats message to handle toy, breed, and owner changes for a dog record
     extra_info_new = None
     extra_info_current = None
     if attribute == "breed_id" or attribute == "toy_id" or attribute == "owner_id":
@@ -53,7 +66,10 @@ def confirm_change(record, attribute, value):
         extra_info_new = f" ({new_owner_breed_toy})"
         extra_info_current = f" ({current_owner_breed_toy})"
 
-    message = f"Changing {getattr(record, 'name')}'s {attribute} from {getattr(record, attribute)}{extra_info_current if extra_info_current else ''} to {value}{extra_info_new if extra_info_new else ''}"
+    # Creates message 
+    message = f"Changing {getattr(record, 'name')}'s {attribute} " \
+                f"from {getattr(record, attribute)}{extra_info_current if extra_info_current else ''} " \
+                f"to {value}{extra_info_new if extra_info_new else ''}"
 
     confirm_update = click.confirm(message)
 
@@ -66,6 +82,13 @@ def confirm_change(record, attribute, value):
 
 
 def return_attributes(parameter):
+    """
+    Returns a list of attributes based on the class selected.
+    Does not return attributes that are Magic Methods or SQLALC instances
+    Does not return id, this is set by the DB.
+    Does not return owner, dogs, toy, or breed attributes. These are objects set by the SQLALC ORM.
+    """
+
     model = MODELS_DICT[parameter]
 
     keys = [key for key in model.__dict__ 
@@ -73,7 +96,13 @@ def return_attributes(parameter):
 
     return keys
 
+
 def create_record(record, parameter):
+    """
+    Create's a new record in the DB.
+    If new dog record, checks if toy, breed, and owner exists.
+    """
+
     model = MODELS_DICT[parameter]
 
     extra_info = None
@@ -82,6 +111,7 @@ def create_record(record, parameter):
         breed = return_record(record["breed_id"], "breed")
         owner = return_record(record["owner_id"], "owner")
         extra_info = f"\n{toy} \n{breed} \n{owner}\n"
+    
     confirm = click.confirm(f"Confirm to add a new {parameter} with the following details? \n{record}{extra_info if extra_info else ''}")
     
     if confirm:
@@ -94,12 +124,19 @@ def create_record(record, parameter):
 
 
 def update_record(record):
+    """
+    With a given updated db object, add's it to the db, commits, and returns the object
+    """
     session.add(record)
     session.commit()
     return record
 
 
 def delete_record(id, parameter):
+    """
+    Delete's a db record
+    """
+
     model = MODELS_DICT[parameter]
     
     record = session.query(model).filter(model.id == id).first()
@@ -107,13 +144,19 @@ def delete_record(id, parameter):
     session.commit()
 
 def search_record(search, parameter):
+    """
+    Searches for a db record based on name
+    """
+
     model = MODELS_DICT[parameter]
     record = session.query(model).filter(model.name.like(f"%{search}%")).all()
     return record
 
 
 def return_record(id, parameter):
-    
+    """
+    Returns an existing record. If it does not exist, throw an error and exit program
+    """
     model = MODELS_DICT[parameter]
     record = session.query(model).filter(model.id == id).first()
 
@@ -123,6 +166,11 @@ def return_record(id, parameter):
 
 
 def build_count_dict(data, arg):
+    """
+    Helper function to sum up how many breeds of a dog or how many toys of a dog.
+    Returns dictionary of key (breed or toy) and total for each key 
+    """
+
     build_dict = {}
     for element in data:
         if getattr(element, arg) in build_dict:
@@ -132,13 +180,23 @@ def build_count_dict(data, arg):
 
     return build_dict    
 
+
 def get_all(parameter):
+    """
+    Return's all the db records for a given record type provided
+    """
+
     model = MODELS_DICT[parameter]
     records = session.query(model).all()
     return records
 
 
 def print_all(data):
+    """
+    Print's all of the object's within a given list.
+    Prompt to continue every 25 records
+    """
+
     counter = 1
     for entry in data:
         click.echo(entry)
@@ -149,7 +207,10 @@ def print_all(data):
 
 
 def print_details(record_obj):
-
+    """
+    Print's the attributes of a given record.
+    Magic methods and SQLALC instance methods are not printed
+    """
     record_dict = record_obj.__dict__
 
     for key, value in record_dict.items():

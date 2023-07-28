@@ -9,49 +9,55 @@ import helpers
 # Keeping them in 1 spot to ensure consistency
 PARAM_ALL = ("dog", "breed", "toy", "owner")
 PARAM_DOG_OWNER = ("dog", "owner")
-CLICK_ID_SETTINGS = (("--id", "-i"), {"required": True, "type" : click.INT, "prompt" : "Current ID", "help" : "Enter ID of record as an INT"})
-CLICK_PARAM_SETTING_DOG_OWNER = (("--parameter", "-p"), {"type" : click.Choice(PARAM_DOG_OWNER), "required": True, "prompt": "Select record type", "help":"Select from the following records"})
-CLICK_PARAM_SETTING_ALL = (("--parameter", "-p"), {"type" : click.Choice(PARAM_ALL), "required": True, "prompt": "Select record type", "help":"Select from the following records"})
+CLICK_ID_SETTINGS = (("--id", "-i"), 
+                    {"required": True, "type" : click.INT, "prompt" : "Current ID", "help" : "Enter ID of record as an INT"})
+CLICK_PARAM_SETTING_DOG_OWNER = (("--parameter", "-p"), 
+                                 {"type" : click.Choice(PARAM_DOG_OWNER), "required": True, "prompt": "Select record type", 
+                                  "help":"Select type of record to perform action on"})
+CLICK_PARAM_SETTING_ALL = (("--parameter", "-p"), 
+                           {"type" : click.Choice(PARAM_ALL), "required": True, "prompt": "Select record type", 
+                            "help":"Select type of record to perform action on"})
 
 @click.group()
 def cli():
     """ Welcome to the Flatiron Dog Daycare CLI. 
     
-    This app manages all the dogs within the daycare center. This includes
-    - Their owners: name, address, who owns which dogs
-    - The dogs: their favorite toys, breed, age, checked in
-    - And the toy and breed lists and their information 
+    This app manages all the dogs within the daycare center. This includes:\n
+    - Their owners: name, address, who owns which dogs\n
+    - The dogs: their favorite toys, breed, age, checked in\n
+    - And the toy plus breed lists and their information \n
+    This app can perform CRUD actions on various records and record attributes.
+    Please browse the help documentation for command options and require inputs.
     
     """
 
 @cli.group()
 def create():
-    """Lists all subcommands for creating entities"""
+    """Subcommands creates a new dog or owner record"""
 
 @cli.group()
 def get():
-    """Lists all subcommands for getting various data from the dogday care DB"""
+    """Subcommands gets (reads) dog, owner, toy, and breed info"""
 
 @cli.group()
 def update():
-    """Lists all subcommands for updating various parameters within the DB"""
+    """Subcommands updates attributes for a given record"""
 
 @cli.group()
 def delete():
-    """Lists all subcommands for deleting entities within the DB"""
+    """Subcommands deletes a given dog or owner record"""
 
 
 
-
-##################################
-# CREATE COMMANDS                #
-##################################
+##################################################
+#               CREATE COMMANDS                  #
+##################################################
 
 
 @create.command()
 @click.option(*CLICK_PARAM_SETTING_DOG_OWNER[0], **CLICK_PARAM_SETTING_DOG_OWNER[1])
-def new_dog_owner(parameter):
-    
+def new_dog_or_owner(parameter):
+    """Add a new dog or owner to the DB. New dog records require an existing owner, toy, and breed record."""
 
     attributes = helpers.return_attributes(parameter)
     new_record_dict = {attr : click.prompt(f"Enter the value for the new {parameter}'s {attr}") for attr in attributes}
@@ -64,16 +70,17 @@ def new_dog_owner(parameter):
     helpers.create_record(new_record_dict, parameter)
 
 
-##################################
-# READ (GETTER) COMMANDS         #
-##################################
+
+##################################################
+#             GETTER (READ) COMMANDS             #
+##################################################
 
 
 @get.command()
 @click.option("--name", type=click.STRING, required=True, help="Search by name", prompt=True)
 @click.option(*CLICK_PARAM_SETTING_ALL[0], **CLICK_PARAM_SETTING_ALL[1])
 def search_by_name(name, parameter):
-    """NEED TO UPDATE THIS"""
+    """Search the database and returns records with names that contains the inputs provided. Case insensitive"""
     result = helpers.search_record(name, parameter)
     helpers.print_all(result)
 
@@ -81,16 +88,16 @@ def search_by_name(name, parameter):
 @get.command()
 @click.option(*CLICK_ID_SETTINGS[0], **CLICK_ID_SETTINGS[1])
 @click.option(*CLICK_PARAM_SETTING_ALL[0], **CLICK_PARAM_SETTING_ALL[1])
-def print_details_for(id, parameter):
-    """NEED TO UPDATE THIS"""
+def details_for(id, parameter):
+    """Returns the record with a matching ID and print's all of it's details. Program aborts for nonexisting records"""
     record = helpers.return_record(id, parameter)
     helpers.print_details(record)
 
-#parameter can be only breed, toy, dogs
+
 @get.command()
 @click.option("--parameter", type=click.Choice(("popular_breed", "favorite_toy", "most_dog")), required=True, prompt=True)
 def most_by(parameter):
-    """NEED TO UPDATE THIS"""
+    """Returns, from most to least, records that match the criteria provided: most popular breed, favorite toy, or owners with the most dogs"""
     if parameter == "popular_breed" or parameter == "favorite_toy":
         dogs = helpers.get_all("dog")
         param_formated = parameter[parameter.find("_")+1:]
@@ -110,22 +117,24 @@ def most_by(parameter):
 
 @get.command()
 @click.option(*CLICK_PARAM_SETTING_ALL[0], **CLICK_PARAM_SETTING_ALL[1])
-def all_records_by(parameter):
-    """Prints out all records based on input parameter"""
+def all_records_for(parameter):
+    """Returns and prints out all records based on input parameter"""
     records = helpers.get_all(parameter)
     helpers.print_all(records)
 
+ 
 
-
-##################################
-# UPDATE COMMANDS                #
-##################################
+##################################################
+#                UPDATE COMMANDS                 #
+##################################################
 
 @update.command()
 @click.option(*CLICK_ID_SETTINGS[0], **CLICK_ID_SETTINGS[1])
 @click.option(*CLICK_PARAM_SETTING_ALL[0], **CLICK_PARAM_SETTING_ALL[1])
 def record_attribute(id, parameter):
-    """NEED TO UPDATE THIS"""
+    """Updates an existing record with the provided attribute and value.
+    Toy, breed, and owner record must exist if changing these attributes for a dog's record 
+    """
     record = helpers.return_record(id, parameter)
 
     keys = helpers.return_attributes(parameter)
@@ -148,6 +157,11 @@ def record_attribute(id, parameter):
 @click.option(*CLICK_ID_SETTINGS[0], **CLICK_ID_SETTINGS[1])
 @click.option(*CLICK_PARAM_SETTING_DOG_OWNER[0], **CLICK_PARAM_SETTING_DOG_OWNER[1])
 def record_from_db(id, parameter):
+    """Delete's an exisiting dog or owner record from the DB. If deleting an owner, dog
+    records belonging to the owner will also be deleted.
+    IMPORTANT: DELETING A RECORD CAN NOT BE UNDONE.
+    """
+
     record = helpers.return_record(id, parameter)
     
     click.echo(record)
@@ -163,7 +177,6 @@ def record_from_db(id, parameter):
         click.echo("Record successfully deleted")
     else:
         click.echo("Action aborted")
-
 
 
 
