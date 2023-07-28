@@ -3,14 +3,24 @@
 import click
 import helpers
 
-CLICK_ID_SETTINGS = ("--id", {"required": True, "type" : click.INT, "prompt" : "Current ID", "help" : "Enter ID of record as an INT"})
+
+# Click Option Settings
+# Many of these settings are repetated multiple times
+# Keeping them in 1 spot to ensure consistency
+PARAM_ALL = ("dog", "breed", "toy", "owner")
+PARAM_DOG_OWNER = ("dog", "owner")
+CLICK_ID_SETTINGS = (("--id", "-i"), {"required": True, "type" : click.INT, "prompt" : "Current ID", "help" : "Enter ID of record as an INT"})
+CLICK_PARAM_SETTING_DOG_OWNER = (("--parameter", "-p"), {"type" : click.Choice(PARAM_DOG_OWNER), "required": True, "prompt": "Select record type", "help":"Select from the following records"})
+CLICK_PARAM_SETTING_ALL = (("--parameter", "-p"), {"type" : click.Choice(PARAM_ALL), "required": True, "prompt": "Select record type", "help":"Select from the following records"})
 
 @click.group()
 def cli():
     """ Welcome to the Flatiron Dog Daycare CLI. 
     
-    This app manages all the dogs checked into the daycare, as well as their information,
-    owners, favorite toy, and other details 
+    This app manages all the dogs within the daycare center. This includes
+    - Their owners: name, address, who owns which dogs
+    - The dogs: their favorite toys, breed, age, checked in
+    - And the toy and breed lists and their information 
     
     """
 
@@ -38,70 +48,30 @@ def delete():
 ##################################
 
 
-## CREATES NEW DOG
-
-
-## can refactor this????
 @create.command()
-@click.option("--name", "-n", required=True, prompt=True)
-@click.option("--age", required=True, type = click.INT, prompt=True)
-@click.option("--temperament", "-temper", required=True, prompt=True)
-@click.option("--owner-id",required=True, type=click.INT, prompt=True)
-@click.option("--breed-id", required=True, type=click.INT, prompt=True)
-@click.option("--toy-id", required=True, type=click.INT, prompt=True)
-def new_dog(name, age, temperament, owner_id, breed_id, toy_id):
-    """Creates new dog, OWNER MUST EXIST IN DB"""
-
-    owner = helpers.return_record(owner_id, "owner")
-    toy = helpers.return_record(toy_id, "toy")
-    breed = helpers.return_record(breed_id, "breed")
-    click.echo(f"New dog {name} will be added to: {owner}.")
-    click.echo(f"Their breed will be {breed}.")
-    click.echo(f"Their favorite toy will be {toy}")
-
-    new_record = {
-        "name": name,
-        "age": age,
-        "checked_in": True,
-        "temperament": temperament,
-        "days_checked_in" : 0,
-        "owner_id" : owner_id,
-        "breed_id" : breed_id,
-        "toy_id" : toy_id
-    }
+@click.option(*CLICK_PARAM_SETTING_DOG_OWNER[0], **CLICK_PARAM_SETTING_DOG_OWNER[1])
+def new_dog_owner(parameter):
     
-    helpers.create_record(new_record, "dog")
 
+    attributes = helpers.return_attributes(parameter)
+    new_record_dict = {attr : click.prompt(f"Enter the value for the new {parameter}'s {attr}") for attr in attributes}
 
+    for key, value in new_record_dict.items():
+        helpers.validate_inputs(key, value)
+        if key == "checked_in" or key == "broken":
+            new_record_dict[key] = helpers.validate_inputs(key, value)
 
-## CREATES NEW OWNER
-
-## can refactor this????
-@create.command()
-@click.option("--name", "-n", required=True)
-@click.option("--phone", "-p", required=True)
-@click.option("--email", "-em", required=True)
-@click.option("--address", "-a", required=True)
-def new_owner(name, phone, email, address):
-    """Creates new owner"""
-    new_record = {
-        "name": name,
-        "phone": phone,
-        "email": email,
-        "address": address
-    }
-    
-    helpers.create_record(new_record, "owner")
+    helpers.create_record(new_record_dict, parameter)
 
 
 ##################################
-# READ COMMANDS                  #
+# READ (GETTER) COMMANDS         #
 ##################################
 
 
 @get.command()
 @click.option("--name", type=click.STRING, required=True, help="Search by name", prompt=True)
-@click.option("--parameter", type=click.Choice(["dog", "breed", "toy", "owner"]), required=True, prompt=True)
+@click.option(*CLICK_PARAM_SETTING_ALL[0], **CLICK_PARAM_SETTING_ALL[1])
 def search_by_name(name, parameter):
     """NEED TO UPDATE THIS"""
     result = helpers.search_record(name, parameter)
@@ -109,8 +79,8 @@ def search_by_name(name, parameter):
 
 
 @get.command()
-@click.option(CLICK_ID_SETTINGS[0], **CLICK_ID_SETTINGS[1])
-@click.option("--parameter", type=click.Choice(["dog", "breed", "toy", "owner"]), required=True, prompt=True)
+@click.option(*CLICK_ID_SETTINGS[0], **CLICK_ID_SETTINGS[1])
+@click.option(*CLICK_PARAM_SETTING_ALL[0], **CLICK_PARAM_SETTING_ALL[1])
 def print_details_for(id, parameter):
     """NEED TO UPDATE THIS"""
     record = helpers.return_record(id, parameter)
@@ -139,7 +109,7 @@ def most_by(parameter):
 
 
 @get.command()
-@click.option("--parameter", "-p", type=click.Choice(["dog", "owner", "breed", "toy"]), required=True, help="select the type of record to browse", prompt=True)
+@click.option(*CLICK_PARAM_SETTING_ALL[0], **CLICK_PARAM_SETTING_ALL[1])
 def all_records_by(parameter):
     """Prints out all records based on input parameter"""
     records = helpers.get_all(parameter)
@@ -151,12 +121,10 @@ def all_records_by(parameter):
 # UPDATE COMMANDS                #
 ##################################
 
-###########################
-# TESTING CODE OUT. TRYING TO REFACTOR UPDATING ATTRIBUTES TO A MORE PROGRAMATTIC WAY
 @update.command()
-@click.option(CLICK_ID_SETTINGS[0], **CLICK_ID_SETTINGS[1])
-@click.option("--parameter", type=click.Choice(("dog", "owner", "toy", "breed")), prompt=True)
-def test_update(id, parameter):
+@click.option(*CLICK_ID_SETTINGS[0], **CLICK_ID_SETTINGS[1])
+@click.option(*CLICK_PARAM_SETTING_ALL[0], **CLICK_PARAM_SETTING_ALL[1])
+def record_attribute(id, parameter):
     """NEED TO UPDATE THIS"""
     record = helpers.return_record(id, parameter)
 
@@ -170,106 +138,6 @@ def test_update(id, parameter):
     helpers.confirm_change(record, attribute, value)
 
 
-#######################################
-
-
-## UPDATES DOG ATTRIBUTES
-@update.command()
-@click.option(CLICK_ID_SETTINGS[0], **CLICK_ID_SETTINGS[1])
-@click.option("--attribute", "-attr", required=True, type=click.Choice(["name", "age", "temperament", "checked_in", "breed_id", "toy_id"]), )
-@click.option("--value", "-v", required=True, help="multi value inputs must be covered in quotes", metavar="'VALUE IN QUOTES'")
-def attribute_dog(attribute, id, value):
-    """Change the details of an exisiting dog"""
-    dog = helpers.return_record(id, "dog")
-
-    ## can refactor this??
-    # checks to see if the toy or breed exists in the DB
-    param = None
-    if attribute == "breed_id":
-        param = "breed_id".replace("_id", "")
-
-    elif attribute == "toy_id":
-        param = "toy_id".replace("_id", "")
-
-    if param:
-        item = helpers.return_record(value, param)
-        click.echo(item)
-
-    # TUPLE USED HERE
-    # converts checked_in answers to boolean responds
-    truthy = ('y', "true", "yes", "t", "1")
-    falsy = ('n', "false", "no", "f", "0")
-    if attribute == "checked_in":
-        if value.lower() in truthy:
-            value = True
-        elif value.lower() in falsy:
-            value = False
-        else:
-            raise click.BadParameter(f"checked_in attribute requires true/false, t/f, yes/no, y/n, or 1/0 answers (case insensitive)")
-
-    # checks age if it's an integer
-    if attribute == "age":
-        try:
-            value = int(value, 10)
-        except:
-            raise click.BadParameter(f"age attributes requires an integer value")
-
-    message = f"Changing {getattr(dog, 'name')}'s {attribute} from {getattr(dog, attribute)} to {value}"
-
-    confirm_update = click.confirm(message)
-
-    if confirm_update:
-        setattr(dog, attribute, value)
-        updated_dog = helpers.update_record(dog)
-        click.echo(f"{updated_dog.name}'s {attribute} is now {getattr(updated_dog, attribute)}")
-    else:
-        click.echo("Update aborted")
-
-
-
-## UPDATES OWNER ATTRIBUTES
-# @update.command()
-# @click.option(CLICK_ID_SETTINGS[0], **CLICK_ID_SETTINGS[1])
-# @click.option("--attribute", "-attr", required=True, type=click.Choice(["name", "phone", "email", "address"]), )
-# @click.option("--value", "-v", required=True, help="multi value inputs must be covered in quotes", metavar="'VALUE IN QUOTES'", type=click.STRING)
-# def attribute_owner(attribute, id, value):
-#     """Change the details of an exisiting owner"""
-#     owner = helpers.return_record(id, "owner")
-
-#     message = f"Changing {getattr(owner, 'name')}'s {attribute} from {getattr(owner, attribute)} to {value}"
-
-#     confirm_update = click.confirm(message)
-
-#     if confirm_update:
-#         setattr(owner, attribute, value)
-#         updated_owner = helpers.update_record(owner)
-#         click.echo(f"{updated_owner.name}'s {attribute} is now {getattr(updated_owner, attribute)}")
-#     else:
-#         click.echo("Update aborted")
-
-
-
-# @update.command()
-# @click.option("--dog-id", required=True, type=click.INT)
-# @click.option("--new-owner-id", required=True, type=click.INT)
-# def dog_owner(dog_id, new_owner_id):
-#     """Updates the owner of the dog."""
-
-#     new_owner = helpers.return_record(new_owner_id, "owner")
-#     dog = helpers.return_record(dog_id, "dog")
-    
-#     message = f"Update DOG '{dog.name}' from it's OWNER {dog.owner.name}, ID {dog.owner.id} to NEW OWNER {new_owner.name}, ID {new_owner.id}"
-
-#     confirm_update = click.confirm(message)
-
-#     if confirm_update:
-#         dog.owner_id = new_owner.id
-#         updated_dog = helpers.update_record(dog)
-#         click.echo("Update successful")
-#         click.echo(f"{updated_dog} now has owner {updated_dog.owner}")
-#     else:
-#         click.echo("Update aborted")
-
 
 
 ##################################
@@ -277,8 +145,8 @@ def attribute_dog(attribute, id, value):
 ##################################
 
 @delete.command()
-@click.option(CLICK_ID_SETTINGS[0], **CLICK_ID_SETTINGS[1])
-@click.option("--parameter", type=click.Choice(("dog", "owner")), required=True, prompt=True)
+@click.option(*CLICK_ID_SETTINGS[0], **CLICK_ID_SETTINGS[1])
+@click.option(*CLICK_PARAM_SETTING_DOG_OWNER[0], **CLICK_PARAM_SETTING_DOG_OWNER[1])
 def record_from_db(id, parameter):
     record = helpers.return_record(id, parameter)
     

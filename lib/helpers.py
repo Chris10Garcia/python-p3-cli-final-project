@@ -29,13 +29,16 @@ def validate_inputs(attribute, value):
     if attribute == "breed_id" or attribute == "toy_id" or attribute == "owner_id":
         return_record(value, attribute.replace("_id", ""))
 
+    #check and fixes for truth or false
     truthy = ('y', "true", "yes", "t", "1")
     falsy = ('n', "false", "no", "f", "0")
     if attribute == "checked_in" or attribute == "broken":
         if value.lower() in truthy:
             value = True
+            return value
         elif value.lower() in falsy:
             value = False
+            return value
         else:
             raise click.BadParameter(f"checked_in attribute requires true/false, t/f, yes/no, y/n, or 1/0 answers (case insensitive)")
 
@@ -73,7 +76,13 @@ def return_attributes(parameter):
 def create_record(record, parameter):
     model = MODELS_DICT[parameter]
 
-    confirm = click.confirm(f"Confirm to add a new {parameter} with the following details? \n{record}")
+    extra_info = None
+    if parameter == "dog":
+        toy = return_record(record["toy_id"], "toy")
+        breed = return_record(record["breed_id"], "breed")
+        owner = return_record(record["owner_id"], "owner")
+        extra_info = f"\n{toy} \n{breed} \n{owner}\n"
+    confirm = click.confirm(f"Confirm to add a new {parameter} with the following details? \n{record}{extra_info if extra_info else ''}")
     
     if confirm:
         new_record = model(**record)
@@ -82,7 +91,6 @@ def create_record(record, parameter):
         click.echo(f"The following has been added: {new_record}")
     else:
         click.echo("Action aborted")
-
 
 
 def update_record(record):
@@ -140,7 +148,6 @@ def print_all(data):
     click.echo("You have reached the end of the list")
 
 
-##
 def print_details(record_obj):
 
     record_dict = record_obj.__dict__
