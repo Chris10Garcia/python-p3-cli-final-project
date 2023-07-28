@@ -64,6 +64,8 @@ def new_dog_or_owner(parameter):
 
     for key, value in new_record_dict.items():
         helpers.validate_inputs(key, value)
+        
+        # deals with truthy / falsy issue
         if key == "checked_in" or key == "broken":
             new_record_dict[key] = helpers.validate_inputs(key, value)
 
@@ -81,6 +83,7 @@ def new_dog_or_owner(parameter):
 @click.option(*CLICK_PARAM_SETTING_ALL[0], **CLICK_PARAM_SETTING_ALL[1])
 def search_by_name(name, parameter):
     """Search the database and returns records with names that contains the inputs provided. Case insensitive"""
+
     result = helpers.search_record(name, parameter)
     helpers.print_all(result)
 
@@ -90,6 +93,7 @@ def search_by_name(name, parameter):
 @click.option(*CLICK_PARAM_SETTING_ALL[0], **CLICK_PARAM_SETTING_ALL[1])
 def details_for(id, parameter):
     """Returns the record with a matching ID and print's all of it's details. Program aborts for nonexisting records"""
+
     record = helpers.return_record(id, parameter)
     helpers.print_details(record)
 
@@ -98,16 +102,21 @@ def details_for(id, parameter):
 @click.option("--parameter", type=click.Choice(("popular_breed", "favorite_toy", "most_dog")), required=True, prompt=True)
 def most_by(parameter):
     """Returns, from most to least, records that match the criteria provided: most popular breed, favorite toy, or owners with the most dogs"""
+
+    # need to manually sum totals for breed or favorite toy
     if parameter == "popular_breed" or parameter == "favorite_toy":
         dogs = helpers.get_all("dog")
-        param_formated = parameter[parameter.find("_")+1:]
-        records_dict = helpers.build_count_dict(dogs, param_formated)
+        param_formated = parameter[parameter.find("_")+1:] #slices of string from _ and keeps everything on the right
+        records_dict = helpers.build_count_dict(dogs, param_formated) 
         message = "Here are the most popular breeds" if parameter == "popular_breed" else "Here are the most favorited toys"
+    
+    # using relationships from SQLALC, can get total sum of dogs without manually counting
     else:
         owners = helpers.get_all("owner")
         records_dict = {owner.name : len(owner.dogs) for owner in owners}
         message = "Here are the owners with the most dogs"
 
+    # returns a tuple of (object, sum)
     sorted_records = sorted(records_dict.items(), key=lambda x: x[1], reverse=True)
 
     click.echo(message)
@@ -119,6 +128,7 @@ def most_by(parameter):
 @click.option(*CLICK_PARAM_SETTING_ALL[0], **CLICK_PARAM_SETTING_ALL[1])
 def all_records_for(parameter):
     """Returns and prints out all records based on input parameter"""
+
     records = helpers.get_all(parameter)
     helpers.print_all(records)
 
@@ -135,10 +145,10 @@ def record_attribute(id, parameter):
     """Updates an existing record with the provided attribute and value.
     Toy, breed, and owner record must exist if changing these attributes for a dog's record 
     """
+
     record = helpers.return_record(id, parameter)
 
     keys = helpers.return_attributes(parameter)
-    # results = [click.prompt(key) for key in keys]
     attribute = click.prompt("Pick attribute to update", type=click.Choice(keys))
     value = click.prompt(f"What will be the new value of this {attribute} property")
 
@@ -165,6 +175,8 @@ def record_from_db(id, parameter):
     record = helpers.return_record(id, parameter)
     
     click.echo(record)
+
+    # handles owner records and subrecords
     if parameter == "owner":
         click.echo("Deleting an owner record will also delete the following dog records")
         for dog in record.dogs:
