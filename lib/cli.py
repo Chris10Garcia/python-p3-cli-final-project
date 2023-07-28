@@ -79,8 +79,8 @@ def new_dog_or_owner(parameter):
 
 
 @get.command()
-@click.option("--name", type=click.STRING, required=True, help="Search by name", prompt=True)
 @click.option(*CLICK_PARAM_SETTING_ALL[0], **CLICK_PARAM_SETTING_ALL[1])
+@click.option("--name", type=click.STRING, required=True, help="Search by name", prompt=True)
 def search_by_name(name, parameter):
     """Search the database and returns records with names that contains the inputs provided. Case insensitive"""
 
@@ -89,8 +89,8 @@ def search_by_name(name, parameter):
 
 
 @get.command()
-@click.option(*CLICK_ID_SETTINGS[0], **CLICK_ID_SETTINGS[1])
 @click.option(*CLICK_PARAM_SETTING_ALL[0], **CLICK_PARAM_SETTING_ALL[1])
+@click.option(*CLICK_ID_SETTINGS[0], **CLICK_ID_SETTINGS[1])
 def details_for(id, parameter):
     """Returns the record with a matching ID and print's all of it's details. Program aborts for nonexisting records"""
 
@@ -139,8 +139,8 @@ def all_records_for(parameter):
 ##################################################
 
 @update.command()
-@click.option(*CLICK_ID_SETTINGS[0], **CLICK_ID_SETTINGS[1])
 @click.option(*CLICK_PARAM_SETTING_ALL[0], **CLICK_PARAM_SETTING_ALL[1])
+@click.option(*CLICK_ID_SETTINGS[0], **CLICK_ID_SETTINGS[1])
 def record_attribute(id, parameter):
     """Updates an existing record with the provided attribute and value.
     Toy, breed, and owner record must exist if changing these attributes for a dog's record 
@@ -164,8 +164,8 @@ def record_attribute(id, parameter):
 ##################################
 
 @delete.command()
-@click.option(*CLICK_ID_SETTINGS[0], **CLICK_ID_SETTINGS[1])
 @click.option(*CLICK_PARAM_SETTING_DOG_OWNER[0], **CLICK_PARAM_SETTING_DOG_OWNER[1])
+@click.option(*CLICK_ID_SETTINGS[0], **CLICK_ID_SETTINGS[1])
 def record_from_db(id, parameter):
     """Delete's an exisiting dog or owner record from the DB. If deleting an owner, dog
     records belonging to the owner will also be deleted.
