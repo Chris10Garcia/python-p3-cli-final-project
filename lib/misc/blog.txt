@@ -1,16 +1,13 @@
+Understanding List Comprehension
 
-
-
-List comprehensions in python is a powerful tool that allows you to create lists, sets, and dictionaries with a single line of code. List comprehensions can create these lists using an iterable and can utilize conditional logic, expressions, and callbacks functions to taylior the output of the elements pushed into the new list.
+List comprehensions in python is a powerful tool that allows you to create lists, sets, and dictionaries with a single line of code. When using list comprehensions to create your lists, you can utilize conditional logic, expressions, and callbacks functions to tailor the output of the elements pushed into the new list.
 
 There are many ways of creating lists in python. We will specifically discuss for loops, list comprehensions and how the two are similar.
-
 
 To create a list using a for loop, you must
 - Instantiate an empty list
 - Loop over an iterable (such as a list, tuple, range, or dictionary object)
 - Append each element to the end of the list
-
 
 Using a for loop, let's create a list that contains the double of values 0 - 10:
 
@@ -31,7 +28,7 @@ double
 # >>> [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
 ```
 
-We can add a conditional if statement. We only want even numbers to be doubled and stored in the list.
+To filter which value gets doubled, we can add a conditional if statement. We only want even numbers to be doubled and stored in the list.
 
 ```
 double = []
@@ -50,7 +47,7 @@ double
 # >>> [0, 4, 8, 12, 16, 20]
 ```
 
-We can also add an else and make it an if expression; if the value is even, double it, else return another thing (the word "hi" ). the structure of the list comprehension will be different:
+We can also add an else clause and make it an if expression; if the value is even, double it, else return another thing (let’s use the word "hi" ). Note, the structure of the list comprehension will be different:
 
 ```
 double = [ i * 2 if i % 2 == 0 else "hi" for i in range (11)]
@@ -58,34 +55,33 @@ double = [ i * 2 if i % 2 == 0 else "hi" for i in range (11)]
 
 ```
 
-The reason for this is due to the sytnax of a list comprehension:
+The reason for this is due to the syntax of a list comprehension:
 
+```
+new_list = [ expression for item in iterable optional_if_condition ]
+```
 
-`new_list = [ expression for item in iterable optional_if_condition ]`
-
-
-Every list compresshenion contains three important components as well as an optional one:
+List comprehension are structured using three important components as well as an optional fourth:
 
 - an expression
 - the item
 - the iterable
-- optional if condition
+- optional if statement
 
 The expression can be the item itself, a call to a function, or any expression that returns a value. For instance, you can have a list with 10 "hi": `greetings = ["hi" for i in range(11)]`
 
-the item is the element in the iterable.
+The item is the element in the iterable.
 
-the iterable can be a list, set, dictionary, range, or any obejct that can return it's elements one at a time.
+The iterable can be a list, set, dictionary, range, or any object that can return its elements one at a time.
 
-the optional if condition acts as a filter. If the conditional evaluates to True, the expression evaluates and the return value gets pushed into the list, otherwise the expression does not run for that round of the iteration. For complex filters, a function can be used to do your analysis. Using the above example, you can have a list with 10 "hi" if your conditional is "if True" or a blank list if your condontional is "if False".
-
-
-The benefits of using list comprehension is that you can use a single tool in many situations to create lists. In JavaScript, you can create new lists utilizing the .map() and .filter() methods. However, there isn't a method that combines the two. Python also has .map() and .filter() methods as well. Fortunately in python, with list comprehension, you have 1 tool that can utilize both methods at your dispolse.
+The optional if statement acts as a filter. If the conditional evaluates to True, the expression component evaluates and the return value gets pushed into the list, otherwise the expression does not run for that round of the iteration. Using the above example, you can have a list with 10 "hi" if your conditional is "if True" or a blank list if your conditional is "if False". For complex filters, a function can be used to do your analysis.
 
 
-Python contains other list data structures and you can apply comprehension to them as well: specifically set and dictionary comprehension.
+The benefits of using list comprehension are that you can use a single tool in many situations to create lists. In JavaScript, you can create new lists utilizing the .map() and .filter() methods. However, there isn't a method that combines the two. Python also has .map() and .filter() methods as well. But fortunately in python, with list comprehension, you have 1 tool that can utilize both methods at your disposal.
 
-Set and dictionary compresshenion are similar to eachother. Both set and dictionary use curly brackets and outputs unique elements into an unordered list but with dictionaries, you must also include values that coresponds to the key.
+Python contains other list data structures and you can apply comprehension to them as well. I will specifically cover set and dictionary comprehension. 
+
+Set and dictionary comprehension are similar to each other. Both set and dictionary use curly brackets and outputs unique elements into an unordered list but with dictionaries, you must also include values that corresponds to the key.
 
 The syntax:
 ```
@@ -93,8 +89,8 @@ new_set = { expression for item in iterable optional_if_condition }
 new_dict = { key_expression : value_expression for item in iterable optional_if_condition }
 ```
 
-
 Let's create a set list where it contains the letters of a sentence
+
 ```
 sentence = "Today, we are learning list, set, and dictionary comprehension"
 set_sentence = { item for item in sentence}
@@ -102,30 +98,28 @@ set_sentence
 # >>> {',', 'l', 'm', 'T', 'r', 'a', 'e', 'n', 'i', 't', 'c', ' ', 's', 'p', 'd', 'o', 'y', 'w', 'h', 'g'}
 ```
 
-Now let's create a dictionary where the key is the letter and the value is the count each of the characters in the sentence
+Now let's create a dictionary where the key is the letter and the value is the count of each character in the sentence.
+
 ```
 set_sentence = { item : sentence.count(item) for item in sentence}
 set_sentence
 # >>> {'T': 1, 'o': 4, 'd': 3, 'a': 5, 'y': 2, ',': 3, ' ': 8, 'w': 1, 'e': 6, 'r': 4, 'l': 2, 'n': 6, 'i': 5, 'g': 1, 's': 3, 't': 3, 'c': 2, 'm': 1, 'p': 1, 'h': 1}
 ```
 
-Additionally for dictionary comprehension, the item can be split into 2 items if the iterable returns returns two values. For instance, we can create a dictionary enumerating a list or using .items() on an exisiting dictionary
+Additionally for dictionary comprehension, you can use 2 items if the iterable returns two values. For instance, we can create a dictionary `enumerating` a list or using .items() method on an existing dictionary.
 
-
-
-
-
-###### i don't think this is needed
-######
-Let's create a new list that counts the length of each string in a list of strings
-
-For loop
 ```
-words = [ "apples", "Python", "World langauges", "list comprehension", "hi", "hello world" ]
-string_length = []
-for item in words:
-    result = len(item)
-    string_length.append(result)
-string_length
-# >>> [6, 6, 15, 18, 2, 11]
+fruits = ["apples", "bananas", "grapes", "oranges", "pineapples"]
+fruit_dict = { key : value for key, value in enumerate(fruits)}
+fruit_dict
+# >>> {0: 'apples', 1: 'bananas', 2: 'grapes', 3: 'oranges', 4: 'pineapples'}
+
+phone_book = {"John" : 3334445555, "Rose" : 5555555555, "Alan" : 1234567890}
+phone_book_edit = { key.upper() : value for key, value in phone_book.items()}
+# >>> {'JOHN': 3334445555, 'ROSE': 5555555555, 'ALAN': 1234567890}
 ```
+
+
+I hope my guide helped you on your programming journey. Please feel free to comment, ask questions, or provide feedback.
+
+Lastly, happy coding!
